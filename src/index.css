@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 @import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
 @theme {
   /* Design System — The Digital Ledger (aligned with Stitch) */
@@ -12,6 +13,8 @@
   --color-ds-border: #e1e1e1;
   --color-ds-text: #37352f;
   --color-ds-secondary: #73726e;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
 
   /* Border radius — aligned with Stitch */
   --radius-DEFAULT: 0.25rem;
@@ -19,6 +22,11 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
+
+  /* Typography scale — tighter tracking for headings */
+  --letter-spacing-tighter: -0.03em;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: -0.01em;
 }
 
 *,
@@ -34,8 +42,12 @@ body {
   background-color: #ffffff;
   color: #37352f;
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
 }
 
 #root {
