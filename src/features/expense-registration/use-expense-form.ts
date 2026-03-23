@@ -1,23 +1,27 @@
 import { useRef, useState } from 'react'
 import { useExpenseStore } from '../../store/expense-store'
-import { calcInstallmentAmount } from '../../core/math/finance'
 import { isCardCategory } from '../../types'
 import type { Category } from '../../types'
 
+/**
+ * Estado del formulario de registro de gastos.
+ *
+ * - `totalAmount` → Monto que se paga **este mes** (la cuota, no el total del bien).
+ * - `installment` → Texto libre con formato "X/Y" (ej: "1/6").
+ *                    Solo visible si la categoría es tarjeta.
+ */
 interface ExpenseFormState {
   description: string
   category: Category
   totalAmount: string
-  totalInstallments: string
-  currentInstallment: string
+  installment: string
 }
 
 const INITIAL_STATE: ExpenseFormState = {
   description: '',
   category: 'OTROS',
   totalAmount: '',
-  totalInstallments: '',
-  currentInstallment: '',
+  installment: '',
 }
 
 export const useExpenseForm = (onSuccess?: () => void) => {
@@ -27,14 +31,6 @@ export const useExpenseForm = (onSuccess?: () => void) => {
   const amountRef = useRef<HTMLInputElement>(null)
 
   const showInstallments = isCardCategory(fields.category)
-
-  const amountPerInstallment =
-    showInstallments && fields.totalAmount && fields.totalInstallments
-      ? calcInstallmentAmount(
-          parseFloat(fields.totalAmount),
-          parseInt(fields.totalInstallments, 10),
-        )
-      : null
 
   const setField = <K extends keyof ExpenseFormState>(key: K, value: ExpenseFormState[K]) => {
     setFields(prev => ({ ...prev, [key]: value }))
@@ -48,17 +44,8 @@ export const useExpenseForm = (onSuccess?: () => void) => {
     if (!fields.totalAmount || isNaN(amount) || amount <= 0)
       next.totalAmount = 'Ingresá un monto válido mayor a 0'
 
-    if (showInstallments) {
-      const installments = parseInt(fields.totalInstallments, 10)
-      if (!fields.totalInstallments || isNaN(installments) || installments < 1)
-        next.totalInstallments = 'Ingresá la cantidad de cuotas (mínimo 1)'
-
-      const current = parseInt(fields.currentInstallment, 10)
-      if (!fields.currentInstallment || isNaN(current) || current < 1)
-        next.currentInstallment = 'Ingresá la cuota actual'
-      else if (current > parseInt(fields.totalInstallments, 10))
-        next.currentInstallment = 'La cuota actual no puede superar el total'
-    }
+    if (showInstallments && !fields.installment.trim())
+      next.installment = 'Ingresá la cuota (ej: 1/6)'
 
     setErrors(next)
     return Object.keys(next).length === 0
@@ -67,17 +54,11 @@ export const useExpenseForm = (onSuccess?: () => void) => {
   const handleSubmit = () => {
     if (!validate()) return
 
-    const amount = parseFloat(fields.totalAmount)
-    const installments = showInstallments ? parseInt(fields.totalInstallments, 10) : undefined
-    const current = showInstallments ? parseInt(fields.currentInstallment, 10) : undefined
-
     addExpense({
       description: fields.description || undefined,
       category: fields.category,
-      totalAmount: amount,
-      totalInstallments: installments,
-      currentInstallment: current,
-      amountPerInstallment: installments ? calcInstallmentAmount(amount, installments) : undefined,
+      totalAmount: parseFloat(fields.totalAmount),
+      installment: showInstallments ? fields.installment.trim() : undefined,
     })
 
     setFields(INITIAL_STATE)
@@ -89,7 +70,6 @@ export const useExpenseForm = (onSuccess?: () => void) => {
     fields,
     errors,
     showInstallments,
-    amountPerInstallment,
     amountRef,
     setField,
     handleSubmit,

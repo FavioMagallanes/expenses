@@ -8,26 +8,30 @@ interface CategoryPickerProps {
 
 const CATEGORIES: Category[] = ['BBVA', 'SUPERVIELLE', 'PRESTAMO', 'OTROS']
 
+/**
+ * CategoryPicker — Select dropdown alineado con Stitch design system.
+ * Reemplaza el grid de chips por un <select> nativo con estilo consistente.
+ */
 export const CategoryPicker = ({ value, onChange }: CategoryPickerProps) => (
-  <div className="flex flex-col gap-1.5 w-full">
-    <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Categoría</span>
-    <div className="grid grid-cols-2 gap-2">
-      {CATEGORIES.map(category => (
-        <button
-          key={category}
-          type="button"
-          onClick={() => onChange(category)}
-          aria-pressed={value === category}
-          className={[
-            'px-3 py-2.5 text-sm font-medium border-b-2 transition-colors',
-            value === category
-              ? 'bg-primary text-white border-b-primary'
-              : 'bg-surface-container-low text-gray-700 border-b-transparent hover:border-b-primary',
-          ].join(' ')}
-        >
-          {CATEGORY_LABELS[category]}
-        </button>
-      ))}
+  <div className="flex flex-col gap-1 w-full">
+    <label className="text-xs font-semibold text-ds-secondary uppercase tracking-wider">
+      Categoría
+    </label>
+    <div className="relative">
+      <select
+        value={value}
+        onChange={e => onChange(e.target.value as Category)}
+        className="w-full appearance-none border border-ds-border rounded-lg bg-surface px-3 py-2.5 pr-10 text-ds-text font-medium text-sm outline-none transition-all focus:ring-1 focus:ring-primary/50 cursor-pointer"
+      >
+        {CATEGORIES.map(category => (
+          <option key={category} value={category}>
+            {CATEGORY_LABELS[category]}
+          </option>
+        ))}
+      </select>
+      <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-ds-secondary text-base pointer-events-none">
+        unfold_more
+      </span>
     </div>
   </div>
 )

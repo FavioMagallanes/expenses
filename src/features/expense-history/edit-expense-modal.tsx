@@ -16,15 +16,8 @@ export const EditExpenseModal = () => {
 const EditExpenseModalContent = ({ onClose }: { onClose: () => void }) => {
   const editingExpense = useExpenseStore(s => s.editingExpense)!
 
-  const {
-    fields,
-    errors,
-    showInstallments,
-    amountPerInstallment,
-    amountRef,
-    setField,
-    handleSubmit,
-  } = useEditExpenseForm(editingExpense, onClose)
+  const { fields, errors, showInstallments, amountRef, setField, handleSubmit } =
+    useEditExpenseForm(editingExpense, onClose)
 
   useEffect(() => {
     amountRef.current?.focus()
@@ -37,39 +30,41 @@ const EditExpenseModalContent = ({ onClose }: { onClose: () => void }) => {
       aria-label="Editar gasto"
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
     >
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} aria-hidden="true" />
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} aria-hidden="true" />
 
-      <div className="relative z-10 w-full sm:max-w-md bg-background p-6 flex flex-col gap-5 shadow-xl">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-gray-800">Editar gasto</h2>
+      <div className="relative z-10 w-full sm:max-w-md bg-white border border-ds-border rounded-xl shadow-xl">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-ds-border">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-ds-secondary text-xl">edit_note</span>
+            <h2 className="text-base font-semibold text-ds-text">Editar gasto</h2>
+          </div>
           <button
             type="button"
             aria-label="Cerrar modal"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-700 transition-colors text-lg leading-none"
+            className="text-ds-secondary hover:text-ds-text transition-colors"
           >
-            ✕
+            <span className="material-symbols-outlined text-xl">close</span>
           </button>
         </div>
 
-        <ExpenseForm
-          description={fields.description}
-          category={fields.category}
-          totalAmount={fields.totalAmount}
-          totalInstallments={fields.totalInstallments}
-          currentInstallment={fields.currentInstallment}
-          showInstallments={showInstallments}
-          amountPerInstallment={amountPerInstallment}
-          amountRef={amountRef}
-          errors={errors}
-          onDescriptionChange={v => setField('description', v)}
-          onCategoryChange={v => setField('category', v)}
-          onTotalAmountChange={v => setField('totalAmount', v)}
-          onTotalInstallmentsChange={v => setField('totalInstallments', v)}
-          onCurrentInstallmentChange={v => setField('currentInstallment', v)}
-          onSubmit={handleSubmit}
-          onCancel={onClose}
-        />
+        <div className="px-6 py-5">
+          <ExpenseForm
+            description={fields.description}
+            category={fields.category}
+            totalAmount={fields.totalAmount}
+            installment={fields.installment}
+            showInstallments={showInstallments}
+            amountRef={amountRef}
+            errors={errors}
+            onDescriptionChange={v => setField('description', v)}
+            onCategoryChange={v => setField('category', v)}
+            onTotalAmountChange={v => setField('totalAmount', v)}
+            onInstallmentChange={v => setField('installment', v)}
+            onSubmit={handleSubmit}
+            onCancel={onClose}
+          />
+        </div>
       </div>
     </div>
   )

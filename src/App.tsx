@@ -9,17 +9,11 @@ import { ExpenseForm } from './features/expense-registration/expense-form'
 import { EditExpenseModal } from './features/expense-history/edit-expense-modal'
 import { ResetButton } from './features/expense-history/reset-button'
 
+/* ─── Modal: nuevo gasto ─────────────────────────────────────────────── */
 const NewExpenseModal = () => {
   const closeModal = useExpenseStore(s => s.closeModal)
-  const {
-    fields,
-    errors,
-    showInstallments,
-    amountPerInstallment,
-    amountRef,
-    setField,
-    handleSubmit,
-  } = useExpenseForm(closeModal)
+  const { fields, errors, showInstallments, amountRef, setField, handleSubmit } =
+    useExpenseForm(closeModal)
 
   return (
     <div
@@ -28,42 +22,47 @@ const NewExpenseModal = () => {
       aria-label="Nuevo gasto"
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
     >
-      <div className="absolute inset-0 bg-black/30" onClick={closeModal} aria-hidden="true" />
-      <div className="relative z-10 w-full sm:max-w-md bg-background p-6 flex flex-col gap-5 shadow-xl">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-gray-800">Nuevo gasto</h2>
+      <div className="absolute inset-0 bg-black/40" onClick={closeModal} aria-hidden="true" />
+      <div className="relative z-10 w-full sm:max-w-md bg-white border border-ds-border rounded-xl shadow-xl">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-ds-border">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-ds-secondary text-xl">
+              receipt_long
+            </span>
+            <h2 className="text-base font-semibold text-ds-text">Registro rápido</h2>
+          </div>
           <button
             type="button"
             aria-label="Cerrar modal"
             onClick={closeModal}
-            className="text-gray-400 hover:text-gray-700 transition-colors text-lg leading-none"
+            className="text-ds-secondary hover:text-ds-text transition-colors"
           >
-            ✕
+            <span className="material-symbols-outlined text-xl">close</span>
           </button>
         </div>
-        <ExpenseForm
-          description={fields.description}
-          category={fields.category}
-          totalAmount={fields.totalAmount}
-          totalInstallments={fields.totalInstallments}
-          currentInstallment={fields.currentInstallment}
-          showInstallments={showInstallments}
-          amountPerInstallment={amountPerInstallment}
-          amountRef={amountRef}
-          errors={errors}
-          onDescriptionChange={v => setField('description', v)}
-          onCategoryChange={v => setField('category', v)}
-          onTotalAmountChange={v => setField('totalAmount', v)}
-          onTotalInstallmentsChange={v => setField('totalInstallments', v)}
-          onCurrentInstallmentChange={v => setField('currentInstallment', v)}
-          onSubmit={handleSubmit}
-          onCancel={closeModal}
-        />
+        <div className="px-6 py-5">
+          <ExpenseForm
+            description={fields.description}
+            category={fields.category}
+            totalAmount={fields.totalAmount}
+            installment={fields.installment}
+            showInstallments={showInstallments}
+            amountRef={amountRef}
+            errors={errors}
+            onDescriptionChange={v => setField('description', v)}
+            onCategoryChange={v => setField('category', v)}
+            onTotalAmountChange={v => setField('totalAmount', v)}
+            onInstallmentChange={v => setField('installment', v)}
+            onSubmit={handleSubmit}
+            onCancel={closeModal}
+          />
+        </div>
       </div>
     </div>
   )
 }
 
+/* ─── Dashboard principal ────────────────────────────────────────────── */
 const Dashboard = () => {
   const {
     budget,
@@ -79,52 +78,56 @@ const Dashboard = () => {
   const resetAll = useExpenseStore(s => s.resetAll)
 
   return (
-    <div className="min-h-svh bg-background">
-      <div className="max-w-xl mx-auto px-4 py-8 flex flex-col gap-6">
-        <header className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-gray-800 tracking-tight">Control de Gastos</h1>
-          <span className="text-xs text-gray-400">
-            {new Date().toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}
-          </span>
+    <main className="min-h-screen bg-white flex justify-center py-12">
+      <div className="w-full max-w-4xl px-6 md:px-16">
+        {/* Header */}
+        <header className="mb-10">
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-ds-text">
+              Control de Gastos
+            </h1>
+            <div className="flex items-center gap-2 text-ds-secondary text-sm">
+              <span className="material-symbols-outlined text-sm">calendar_today</span>
+              {new Date().toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}
+            </div>
+          </div>
+
+          {/* Budget form */}
+          <div className="mt-6">
+            <BudgetForm
+              onSubmit={budget ? handleEditBudget : handleSetBudget}
+              isEditing={!!budget}
+              error={error}
+            />
+          </div>
         </header>
 
-        {budget ? (
-          <>
+        {/* Stats */}
+        {budget && (
+          <section className="mb-10">
             <BudgetSummary
               budgetAmount={budget.amount}
               totalSpent={totalSpent}
               remainingBalance={remainingBalance}
               isOverBudget={isOverBudget}
             />
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={() => handleEditBudget(budget.amount)}
-                className="text-xs text-gray-400 hover:text-primary transition-colors underline-offset-2 hover:underline"
-              >
-                Editar presupuesto
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className="bg-surface-container-low p-5 flex flex-col gap-4">
-            <p className="text-sm text-gray-600 font-medium">Configurá tu presupuesto mensual</p>
-            <BudgetForm onSubmit={handleSetBudget} isEditing={false} error={error} />
-          </div>
+          </section>
         )}
 
-        <section className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Gastos</h2>
+        {/* Transactions */}
+        <section>
+          <div className="flex items-center justify-between mb-4 border-b border-ds-border pb-2">
+            <h2 className="text-lg font-semibold text-ds-text">Movimientos recientes</h2>
             <button
               type="button"
               onClick={openModal}
-              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium bg-primary text-white hover:bg-primary-hover transition-colors"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-primary hover:bg-primary-hover rounded-lg transition-colors"
             >
-              <span aria-hidden="true">＋</span>
+              <span className="material-symbols-outlined text-base">add</span>
               Nuevo gasto
             </button>
           </div>
+
           <ExpenseList
             expenses={expenses}
             onEdit={handleEdit}
@@ -133,24 +136,38 @@ const Dashboard = () => {
           />
         </section>
 
-        <footer className="flex justify-end pt-2">
+        {/* Footer reset */}
+        <div className="flex justify-end mt-8 pt-4 border-t border-ds-border">
           <ResetButton onConfirm={resetAll} />
-        </footer>
+        </div>
       </div>
-    </div>
+    </main>
   )
 }
 
+/* ─── App root ───────────────────────────────────────────────────────── */
 const App = () => {
   const isModalOpen = useExpenseStore(s => s.isModalOpen)
   const editingExpense = useExpenseStore(s => s.editingExpense)
+  const openModal = useExpenseStore(s => s.openModal)
 
   return (
-    <>
+    <div className="min-h-screen bg-white">
       <Dashboard />
+
+      {/* FAB — solo visible en mobile, en desktop el botón está inline */}
+      <button
+        type="button"
+        aria-label="Nuevo gasto"
+        onClick={openModal}
+        className="md:hidden fixed bottom-6 right-6 size-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-40"
+      >
+        <span className="material-symbols-outlined text-3xl">add</span>
+      </button>
+
       {isModalOpen && !editingExpense && <NewExpenseModal />}
       <EditExpenseModal />
-    </>
+    </div>
   )
 }
 

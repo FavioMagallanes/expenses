@@ -1,9 +1,8 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { calcTotalSpent, calcRemainingBalance, calcInstallmentAmount } from '../core/math/finance'
+import { calcTotalSpent, calcRemainingBalance } from '../core/math/finance'
 import { STORAGE_KEY, partialize } from '../core/storage/persist-config'
-import { isCardCategory } from '../types'
-import type { Expense, Budget, MonthlySummary, Category } from '../types'
+import type { Expense, Budget, MonthlySummary } from '../types'
 
 interface NavSlice {
   isModalOpen: boolean
@@ -31,9 +30,6 @@ const buildExpense = (raw: Omit<Expense, 'id' | 'registeredAt'>): Expense => ({
   ...raw,
   id: crypto.randomUUID(),
   registeredAt: new Date().toISOString(),
-  ...(isCardCategory(raw.category as Category) && raw.totalInstallments
-    ? { amountPerInstallment: calcInstallmentAmount(raw.totalAmount, raw.totalInstallments) }
-    : {}),
 })
 
 const buildBudget = (amount: number): Budget => ({
@@ -60,23 +56,7 @@ export const useExpenseStore = create<ExpenseStore>()(
 
       updateExpense: (id, changes) =>
         set(s => ({
-          expenses: s.expenses.map(e =>
-            e.id === id
-              ? {
-                  ...e,
-                  ...changes,
-                  ...(isCardCategory((changes.category ?? e.category) as Category) &&
-                  (changes.totalInstallments ?? e.totalInstallments)
-                    ? {
-                        amountPerInstallment: calcInstallmentAmount(
-                          changes.totalAmount ?? e.totalAmount,
-                          (changes.totalInstallments ?? e.totalInstallments)!,
-                        ),
-                      }
-                    : {}),
-                }
-              : e,
-          ),
+          expenses: s.expenses.map(e => (e.id === id ? { ...e, ...changes } : e)),
         })),
 
       deleteExpense: (id: string) => set(s => ({ expenses: s.expenses.filter(e => e.id !== id) })),

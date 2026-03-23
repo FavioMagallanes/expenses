@@ -1,4 +1,4 @@
-const formatCurrency = (value: number) =>
+const fmt = (value: number) =>
   new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value)
 
 interface BudgetSummaryProps {
@@ -13,39 +13,66 @@ export const BudgetSummary = ({
   totalSpent,
   remainingBalance,
   isOverBudget,
-}: BudgetSummaryProps) => (
-  <div className="bg-surface-container-low p-4 flex flex-col gap-3 w-full">
-    <SummaryRow
-      label="Presupuesto mensual"
-      value={formatCurrency(budgetAmount)}
-      className="text-gray-700"
-    />
-    <SummaryRow
-      label="Total gastado"
-      value={formatCurrency(totalSpent)}
-      className="text-gray-700"
-    />
-    <div className="border-t border-gray-200 pt-3">
-      <SummaryRow
+}: BudgetSummaryProps) => {
+  const pct = budgetAmount > 0 ? Math.min((totalSpent / budgetAmount) * 100, 100) : 0
+  const barColor = isOverBudget ? 'bg-red-500' : pct > 80 ? 'bg-orange-400' : 'bg-primary'
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <StatCard
+        label="Gastado"
+        value={fmt(totalSpent)}
+        footer={
+          <div className="mt-4">
+            <div className="h-2 bg-ds-border rounded-full overflow-hidden">
+              <div className={`h-full ${barColor} transition-all`} style={{ width: `${pct}%` }} />
+            </div>
+            <p className="text-xs text-ds-secondary mt-2">{pct.toFixed(0)}% del presupuesto</p>
+          </div>
+        }
+      />
+      <StatCard
         label="Saldo restante"
-        value={formatCurrency(remainingBalance)}
-        className={isOverBudget ? 'text-red-600 font-semibold' : 'text-primary font-semibold'}
+        value={fmt(remainingBalance)}
+        valueClassName={isOverBudget ? 'text-red-500' : 'text-ds-text'}
+        footer={
+          <p
+            className={`text-xs mt-6 font-medium flex items-center gap-1 ${isOverBudget ? 'text-red-500' : 'text-green-600'}`}
+          >
+            <span className="material-symbols-outlined text-xs">
+              {isOverBudget ? 'trending_down' : 'trending_up'}
+            </span>
+            {isOverBudget ? 'Superaste el presupuesto' : 'En línea este mes'}
+          </p>
+        }
+      />
+      <StatCard
+        label="Presupuesto mensual"
+        value={fmt(budgetAmount)}
+        footer={
+          <p className="text-xs text-ds-secondary mt-6">
+            Período: {new Date().toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}
+          </p>
+        }
       />
     </div>
-  </div>
-)
+  )
+}
 
-const SummaryRow = ({
+const StatCard = ({
   label,
   value,
-  className,
+  valueClassName = 'text-ds-text',
+  footer,
 }: {
   label: string
   value: string
-  className?: string
+  valueClassName?: string
+  footer?: React.ReactNode
 }) => (
-  <div className="flex justify-between items-center text-sm">
-    <span className="text-gray-500">{label}</span>
-    <span className={className}>{value}</span>
+  <div className="border border-ds-border rounded-xl bg-background p-5 hover:bg-[#EFEFEF] transition-colors">
+    <p className="text-xs font-semibold text-ds-secondary uppercase tracking-wider mb-2">{label}</p>
+    <p className={`text-2xl font-bold ${valueClassName}`}>{value}</p>
+    {footer}
   </div>
 )

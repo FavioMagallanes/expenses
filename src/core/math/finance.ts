@@ -3,9 +3,10 @@ import type { Expense } from '../../types'
 
 Big.RM = Big.roundHalfUp
 
-export const calcInstallmentAmount = (totalAmount: number, installments: number): number =>
-  Big(totalAmount).div(installments).round(2, Big.roundHalfUp).toNumber()
-
+/**
+ * Suma todos los `totalAmount` de los gastos.
+ * `totalAmount` representa el monto de la cuota que se paga este mes.
+ */
 export const calcTotalSpent = (expenses: Expense[]): number =>
   expenses.reduce((acc, e) => Big(acc).plus(e.totalAmount).toNumber(), 0)
 
