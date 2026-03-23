@@ -25,7 +25,7 @@
 - [ ] T005 Reemplazar `src/index.css` con `@import "tailwindcss"` y tokens del Design System
 - [ ] T006 Crear `src/index.css` con las custom properties del Design System "The Digital Ledger":
   ```css
-  @import "tailwindcss";
+  @import 'tailwindcss';
   @theme {
     --color-background: #f9f9f7;
     --color-surface-container-low: #f2f4f2;
@@ -64,7 +64,7 @@
   - Agregar slice de navegación SPA: `isModalOpen: boolean`, `openModal: () => void`, `closeModal: () => void` (sin react-router)
   - Usar `partialize` para excluir funciones de la serialización
 - [ ] T015 [P] Crear `src/shared/ui/primary-button.tsx` — botón con degradado primario del Design System (bg `primary` → hover 10% más oscuro), sin border radius (No-Line Rule)
-- [ ] T016 [P] Crear `src/shared/ui/notion-input.tsx` — input Notion-style: borde inferior 1px `primary`, sin border lateral/superior, fondo `surface-container-low`, sin outline en focus
+- [x] T016 [P] Crear `src/shared/ui/ledger-input.tsx` — input con estilo "The Digital Ledger": borde inferior 1px `primary`, sin bordes lateral/superior, fondo `surface-container-low`, sin outline en focus. **Naming rule**: los componentes UI propios del proyecto usan el prefijo `Ledger`; nunca hacer referencia a productos de terceros (ej. Notion) en nombres de componentes, interfaces ni comentarios.
 
 **Checkpoint**: Tipos, funciones de cálculo, store y componentes base compartidos listos. Features pueden implementarse en paralelo.
 
@@ -77,7 +77,7 @@
 **Independent Test**: Ingresar $50.000, confirmar y verificar que `getResumen().saldo_restante === 5000000` (centavos).
 
 - [ ] T017 [US1] Crear `src/features/budget/use-budget.ts` — hook que consume el store: expone `presupuesto`, `saldo`, `setBudget`, `editBudget`; valida que `monto > 0` antes de llamar al store; usa `getResumen()` para derivar `saldo_restante`
-- [ ] T018 [P] [US1] Crear `src/features/budget/budget-form.tsx` — componente presentacional: recibe `onSubmit(monto: number)`, `isEditing: boolean`; usa `notion-input.tsx` y `primary-button.tsx`; sin lógica de validación interna
+- [ ] T018 [P] [US1] Crear `src/features/budget/budget-form.tsx` — componente presentacional: recibe `onSubmit(monto: number)`, `isEditing: boolean`; usa `ledger-input.tsx` y `primary-button.tsx`; sin lógica de validación interna
 - [ ] T019 [P] [US1] Crear `src/features/budget/budget-summary.tsx` — componente presentacional: recibe `presupuesto`, `totalGastado`, `saldoRestante`, `esNegativo`; aplica `text-[--color-primary]` para saldo positivo y `text-red-600` para negativo (FR-012); fondo `surface-container-low` con Tonal Layering
 
 **Checkpoint**: US1 completa y verificable de forma independiente.
@@ -92,7 +92,7 @@
 
 - [ ] T020 [US2] Crear `src/features/expense-registration/category-picker.tsx` — componente presentacional: recibe `value: Category`, `onChange(cat: Category) => void`; renderiza 4 botones/chips para BBVA, SUPERVIELLE, PRÉSTAMO, OTROS; selección activa con fondo `primary` y texto blanco; sin border radius (No-Line Rule); quick-select en un tap (FR-011)
 - [ ] T021 [US2] Crear `src/features/expense-registration/use-expense-form.ts` — hook: gestiona estado del formulario; detecta `esTarjeta(categoria)` para habilitar/deshabilitar campos de cuotas (FR-003); calcula `montoPorCuota` en tiempo real usando `calcMontoCuota` de `src/core/math/finance.ts` (FR-004); expone `autoFocusRef` para foco automático en monto (FR-010); valida todos los campos antes de llamar `addGasto`
-- [ ] T022 [US2] Crear `src/features/expense-registration/expense-form.tsx` — componente presentacional: recibe todas las props del hook; usa `autoFocusRef` en el input de monto; muestra/oculta sección de cuotas condicionalmente; usa `category-picker.tsx`, `notion-input.tsx`, `primary-button.tsx`; flujo completo en ≤ 4 interacciones (SC-001)
+- [ ] T022 [US2] Crear `src/features/expense-registration/expense-form.tsx` — componente presentacional: recibe todas las props del hook; usa `autoFocusRef` en el input de monto; muestra/oculta sección de cuotas condicionalmente; usa `category-picker.tsx`, `ledger-input.tsx`, `primary-button.tsx`; flujo completo en ≤ 4 interacciones (SC-001)
 - [ ] T023 [US3] Crear `src/features/expense-history/expense-item.tsx` — componente presentacional: recibe un `Gasto`; muestra descripción, `categoria`, monto total formateado y, si es tarjeta, "Cuota X de Y — $monto_cuota"; fondo `surface-container-low`; sin divisores entre items (No-Line Rule)
 - [ ] T024 [US3] Crear `src/features/expense-history/expense-list.tsx` — componente presentacional: recibe `gastos: Gasto[]`; renderiza lista de `expense-item.tsx` con Tonal Layering alternado; muestra estado vacío con CTA cuando `gastos.length === 0`; sin `border` entre items (0px — No-Line Rule)
 
