@@ -1,99 +1,98 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { calcTotalGastado, calcSaldo, calcMontoCuota } from '../core/math/finance'
+import { calcTotalSpent, calcRemainingBalance, calcInstallmentAmount } from '../core/math/finance'
 import { STORAGE_KEY, partialize } from '../core/storage/persist-config'
-import { esTarjeta } from '../types'
-import type { Gasto, Presupuesto, ResumenMensual, Category } from '../types'
+import { isCardCategory } from '../types'
+import type { Expense, Budget, MonthlySummary, Category } from '../types'
 
 interface NavSlice {
   isModalOpen: boolean
-  editingGasto: Gasto | null
+  editingExpense: Expense | null
   openModal: () => void
   closeModal: () => void
-  openEditModal: (gasto: Gasto) => void
+  openEditModal: (expense: Expense) => void
 }
 
 interface DataSlice {
-  presupuesto: Presupuesto | null
-  gastos: Gasto[]
-  setBudget: (monto: number) => void
-  editBudget: (monto: number) => void
-  addGasto: (gasto: Omit<Gasto, 'id' | 'fecha_registro'>) => void
-  updateGasto: (id: string, changes: Partial<Omit<Gasto, 'id' | 'fecha_registro'>>) => void
-  deleteGasto: (id: string) => void
+  budget: Budget | null
+  expenses: Expense[]
+  setBudget: (amount: number) => void
+  editBudget: (amount: number) => void
+  addExpense: (expense: Omit<Expense, 'id' | 'registeredAt'>) => void
+  updateExpense: (id: string, changes: Partial<Omit<Expense, 'id' | 'registeredAt'>>) => void
+  deleteExpense: (id: string) => void
   resetAll: () => void
-  getResumen: () => ResumenMensual
+  getSummary: () => MonthlySummary
 }
 
 type ExpenseStore = DataSlice & NavSlice
 
-const buildGasto = (raw: Omit<Gasto, 'id' | 'fecha_registro'>): Gasto => ({
+const buildExpense = (raw: Omit<Expense, 'id' | 'registeredAt'>): Expense => ({
   ...raw,
   id: crypto.randomUUID(),
-  fecha_registro: new Date().toISOString(),
-  ...(esTarjeta(raw.categoria as Category) && raw.total_cuotas
-    ? { monto_por_cuota: calcMontoCuota(raw.monto_total, raw.total_cuotas) }
+  registeredAt: new Date().toISOString(),
+  ...(isCardCategory(raw.category as Category) && raw.totalInstallments
+    ? { amountPerInstallment: calcInstallmentAmount(raw.totalAmount, raw.totalInstallments) }
     : {}),
 })
 
-const buildPresupuesto = (monto: number): Presupuesto => ({
-  monto,
-  fecha_configuracion: new Date().toISOString(),
+const buildBudget = (amount: number): Budget => ({
+  amount,
+  configuredAt: new Date().toISOString(),
 })
 
 export const useExpenseStore = create<ExpenseStore>()(
   persist(
     (set, get) => ({
-      presupuesto: null,
-      gastos: [],
+      budget: null,
+      expenses: [],
       isModalOpen: false,
-      editingGasto: null,
+      editingExpense: null,
 
-      openModal: () => set({ isModalOpen: true, editingGasto: null }),
-      closeModal: () => set({ isModalOpen: false, editingGasto: null }),
-      openEditModal: (gasto: Gasto) => set({ isModalOpen: true, editingGasto: gasto }),
+      openModal: () => set({ isModalOpen: true, editingExpense: null }),
+      closeModal: () => set({ isModalOpen: false, editingExpense: null }),
+      openEditModal: (expense: Expense) => set({ isModalOpen: true, editingExpense: expense }),
 
-      setBudget: (monto: number) => set({ presupuesto: buildPresupuesto(monto) }),
-      editBudget: (monto: number) => set({ presupuesto: buildPresupuesto(monto) }),
+      setBudget: (amount: number) => set({ budget: buildBudget(amount) }),
+      editBudget: (amount: number) => set({ budget: buildBudget(amount) }),
 
-      addGasto: raw => set(s => ({ gastos: [...s.gastos, buildGasto(raw)] })),
+      addExpense: raw => set(s => ({ expenses: [...s.expenses, buildExpense(raw)] })),
 
-      updateGasto: (id, changes) =>
+      updateExpense: (id, changes) =>
         set(s => ({
-          gastos: s.gastos.map(g =>
-            g.id === id
+          expenses: s.expenses.map(e =>
+            e.id === id
               ? {
-                  ...g,
+                  ...e,
                   ...changes,
-                  ...(esTarjeta((changes.categoria ?? g.categoria) as Category) &&
-                  (changes.total_cuotas ?? g.total_cuotas)
+                  ...(isCardCategory((changes.category ?? e.category) as Category) &&
+                  (changes.totalInstallments ?? e.totalInstallments)
                     ? {
-                        monto_por_cuota: calcMontoCuota(
-                          changes.monto_total ?? g.monto_total,
-                          (changes.total_cuotas ?? g.total_cuotas)!,
+                        amountPerInstallment: calcInstallmentAmount(
+                          changes.totalAmount ?? e.totalAmount,
+                          (changes.totalInstallments ?? e.totalInstallments)!,
                         ),
                       }
                     : {}),
                 }
-              : g,
+              : e,
           ),
         })),
 
-      deleteGasto: id => set(s => ({ gastos: s.gastos.filter(g => g.id !== id) })),
+      deleteExpense: (id: string) => set(s => ({ expenses: s.expenses.filter(e => e.id !== id) })),
 
-      resetAll: () =>
-        set({ presupuesto: null, gastos: [], isModalOpen: false, editingGasto: null }),
+      resetAll: () => set({ budget: null, expenses: [], isModalOpen: false, editingExpense: null }),
 
-      getResumen: (): ResumenMensual => {
-        const { presupuesto, gastos } = get()
-        const total_gastado = calcTotalGastado(gastos)
-        const pMonto = presupuesto?.monto ?? 0
-        const saldo_restante = calcSaldo(pMonto, total_gastado)
+      getSummary: (): MonthlySummary => {
+        const { budget, expenses } = get()
+        const totalSpent = calcTotalSpent(expenses)
+        const budgetAmount = budget?.amount ?? 0
+        const remainingBalance = calcRemainingBalance(budgetAmount, totalSpent)
         return {
-          presupuesto: pMonto,
-          total_gastado,
-          saldo_restante,
-          es_negativo: saldo_restante < 0,
+          budget: budgetAmount,
+          totalSpent,
+          remainingBalance,
+          isOverBudget: remainingBalance < 0,
         }
       },
     }),

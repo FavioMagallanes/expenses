@@ -1,17 +1,29 @@
-# Tas**Stack**: React 19 · TypeScript 5.7 · Zustand 5 · Big.js 6 · Tailwind CSS 4 · Vite 6
-
-**Architecture**: Screaming Architecture · SPA (sin router) · Hooks/Presentational split · kebab-case
-
-> **Regla de nomenclatura UI (v1.0.3)**: Los componentes de la app tienen identidad propia
-> basada en el concepto "The Digital Ledger". Ningún nombre de componente, archivo, clase
-> ni comentario DEBE referenciar productos de terceros (Notion, Linear, etc.).
-> El input minimalista de borde inferior se llama `LedgerInput` / `ledger-input.tsx`.: App de Control de Gastos Mensuales
+# Tasks: App de Control de Gastos Mensuales
 
 **Input**: Design documents from `/specs/001-expense-tracker-core/`
 **Prerequisites**: plan.md ✅ spec.md ✅ research.md ✅ data-model.md ✅ contracts/ ✅ quickstart.md ✅
 
 **Stack**: React 19 · TypeScript 5.7 · Zustand 5 · Big.js 6 · Tailwind CSS 4 · Vite 6
 **Architecture**: Screaming Architecture · SPA (sin router) · Hooks/Presentational split · kebab-case
+
+> **Regla de nomenclatura UI (v1.0.3)**: Los componentes de la app tienen identidad propia
+> basada en el concepto "The Digital Ledger". Ningún nombre de componente, archivo, clase
+> ni comentario DEBE referenciar productos de terceros (Notion, Linear, etc.).
+> El input minimalista de borde inferior se llama `LedgerInput` / `ledger-input.tsx`.
+
+> **Regla de idioma en código (v1.0.4)**: Todos los identificadores del código fuente
+> (variables, parámetros, funciones, métodos, componentes, interfaces, tipos, props)
+> DEBEN estar en **inglés**. El español se reserva exclusivamente para strings de UI
+> visibles al usuario (labels, placeholders, mensajes de error). Esta regla aplica
+> a todos los archivos: types, store, hooks, components y utils.
+>
+> Renombramientos aplicados en esta versión:
+>
+> - `Gasto` → `Expense` · `Presupuesto` → `Budget` · `ResumenMensual` → `MonthlySummary`
+> - `esTarjeta` → `isCardCategory` · `CATEGORIAS_TARJETA` → `CARD_CATEGORIES`
+> - `calcMontoCuota` → `calcInstallmentAmount` · `calcTotalGastado` → `calcTotalSpent` · `calcSaldo` → `calcRemainingBalance`
+> - `getResumen` → `getSummary` · `editingGasto` → `editingExpense` · `openEditModal(gasto)` → `openEditModal(expense)`
+> - Props snake_case en español → camelCase en inglés (ej: `monto_total` → `totalAmount`, `fecha_registro` → `registeredAt`)
 
 ## Format: `[ID] [P?] [Story] Description`
 

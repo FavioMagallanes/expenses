@@ -1,35 +1,35 @@
 export type Category = 'BBVA' | 'SUPERVIELLE' | 'PRESTAMO' | 'OTROS'
 
-export interface Gasto {
+export interface Expense {
   id: string
-  descripcion?: string
-  categoria: Category
-  monto_total: number
-  cuota_actual?: number
-  total_cuotas?: number
-  monto_por_cuota?: number
-  fecha_registro: string
+  description?: string
+  category: Category
+  totalAmount: number
+  currentInstallment?: number
+  totalInstallments?: number
+  amountPerInstallment?: number
+  registeredAt: string
 }
 
-export interface Presupuesto {
-  monto: number
-  fecha_configuracion: string
+export interface Budget {
+  amount: number
+  configuredAt: string
 }
 
-export interface ResumenMensual {
-  presupuesto: number
-  total_gastado: number
-  saldo_restante: number
-  es_negativo: boolean
+export interface MonthlySummary {
+  budget: number
+  totalSpent: number
+  remainingBalance: number
+  isOverBudget: boolean
 }
 
-export const CATEGORIAS_TARJETA: Category[] = ['BBVA', 'SUPERVIELLE']
+export const CARD_CATEGORIES: Category[] = ['BBVA', 'SUPERVIELLE']
 
-export const CATEGORIA_LABELS: Record<Category, string> = {
+export const CATEGORY_LABELS: Record<Category, string> = {
   BBVA: 'Tarjeta BBVA',
   SUPERVIELLE: 'Tarjeta Supervielle',
   PRESTAMO: 'Préstamo',
   OTROS: 'Otros',
 }
 
-export const esTarjeta = (cat: Category): boolean => CATEGORIAS_TARJETA.includes(cat)
+export const isCardCategory = (category: Category): boolean => CARD_CATEGORIES.includes(category)
