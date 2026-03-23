@@ -1,4 +1,11 @@
-# Tasks: App de Control de Gastos Mensuales
+# Tas**Stack**: React 19 · TypeScript 5.7 · Zustand 5 · Big.js 6 · Tailwind CSS 4 · Vite 6
+
+**Architecture**: Screaming Architecture · SPA (sin router) · Hooks/Presentational split · kebab-case
+
+> **Regla de nomenclatura UI (v1.0.3)**: Los componentes de la app tienen identidad propia
+> basada en el concepto "The Digital Ledger". Ningún nombre de componente, archivo, clase
+> ni comentario DEBE referenciar productos de terceros (Notion, Linear, etc.).
+> El input minimalista de borde inferior se llama `LedgerInput` / `ledger-input.tsx`.: App de Control de Gastos Mensuales
 
 **Input**: Design documents from `/specs/001-expense-tracker-core/`
 **Prerequisites**: plan.md ✅ spec.md ✅ research.md ✅ data-model.md ✅ contracts/ ✅ quickstart.md ✅
