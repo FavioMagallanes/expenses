@@ -14,7 +14,7 @@ const CATEGORIES: Category[] = ['BBVA', 'SUPERVIELLE', 'PRESTAMO', 'OTROS']
  */
 export const CategoryPicker = ({ value, onChange }: CategoryPickerProps) => (
   <div className="flex flex-col gap-1 w-full">
-    <label className="text-xs font-semibold text-ds-secondary uppercase tracking-wider">
+    <label className="text-[11px] font-semibold text-ds-secondary uppercase tracking-widest">
       Categoría
     </label>
     <div className="relative">

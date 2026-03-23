@@ -8,6 +8,7 @@ import { ExpenseList } from './features/expense-history/expense-list'
 import { ExpenseForm } from './features/expense-registration/expense-form'
 import { EditExpenseModal } from './features/expense-history/edit-expense-modal'
 import { ResetButton } from './features/expense-history/reset-button'
+import { Button } from './shared/ui/button'
 
 /* ─── Modal: nuevo gasto ─────────────────────────────────────────────── */
 const NewExpenseModal = () => {
@@ -35,7 +36,7 @@ const NewExpenseModal = () => {
             type="button"
             aria-label="Cerrar modal"
             onClick={closeModal}
-            className="text-ds-secondary hover:text-ds-text transition-colors"
+            className="size-8 inline-flex items-center justify-center rounded-lg text-ds-secondary hover:bg-surface hover:text-ds-text transition-colors"
           >
             <span className="material-symbols-outlined text-xl">close</span>
           </button>
@@ -83,10 +84,10 @@ const Dashboard = () => {
         {/* Header */}
         <header className="mb-10">
           <div className="flex items-center justify-between mb-2">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-ds-text">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tighter text-ds-text">
               Control de Gastos
             </h1>
-            <div className="flex items-center gap-2 text-ds-secondary text-sm">
+            <div className="flex items-center gap-2 text-ds-secondary text-[13px] tracking-normal">
               <span className="material-symbols-outlined text-sm">calendar_today</span>
               {new Date().toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}
             </div>
@@ -117,15 +118,18 @@ const Dashboard = () => {
         {/* Transactions */}
         <section>
           <div className="flex items-center justify-between mb-4 border-b border-ds-border pb-2">
-            <h2 className="text-lg font-semibold text-ds-text">Movimientos recientes</h2>
-            <button
-              type="button"
+            <h2 className="text-lg font-semibold tracking-tight text-ds-text">
+              Movimientos recientes
+            </h2>
+            <Button
+              variant="primary"
+              size="sm"
+              leadingIcon="add"
               onClick={openModal}
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-primary hover:bg-primary-hover rounded-lg transition-colors"
+              className="hidden md:inline-flex"
             >
-              <span className="material-symbols-outlined text-base">add</span>
               Nuevo gasto
-            </button>
+            </Button>
           </div>
 
           <ExpenseList
@@ -156,14 +160,14 @@ const App = () => {
       <Dashboard />
 
       {/* FAB — solo visible en mobile, en desktop el botón está inline */}
-      <button
-        type="button"
+      <Button
+        variant="primary"
+        size="lg"
         aria-label="Nuevo gasto"
         onClick={openModal}
-        className="md:hidden fixed bottom-6 right-6 size-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-40"
-      >
-        <span className="material-symbols-outlined text-3xl">add</span>
-      </button>
+        className="md:hidden fixed bottom-6 right-6 size-14! rounded-full! shadow-lg hover:scale-105 active:scale-95 transition-transform z-40"
+        leadingIcon="add"
+      />
 
       {isModalOpen && !editingExpense && <NewExpenseModal />}
       <EditExpenseModal />

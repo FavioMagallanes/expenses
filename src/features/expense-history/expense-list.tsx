@@ -1,4 +1,5 @@
 import { ExpenseItem } from './expense-item'
+import { Button } from '../../shared/ui/button'
 import type { Expense } from '../../types'
 
 interface ExpenseListProps {
@@ -13,15 +14,13 @@ export const ExpenseList = ({ expenses, onEdit, onDelete, onAddFirst }: ExpenseL
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center border border-ds-border rounded-xl">
         <span className="material-symbols-outlined text-4xl text-ds-secondary">receipt_long</span>
-        <p className="text-sm text-ds-secondary">Todavía no hay gastos registrados este mes.</p>
+        <p className="text-sm text-ds-secondary leading-relaxed">
+          Todavía no hay gastos registrados este mes.
+        </p>
         {onAddFirst && (
-          <button
-            type="button"
-            onClick={onAddFirst}
-            className="text-sm text-primary font-medium hover:underline underline-offset-2"
-          >
+          <Button variant="link" size="sm" onClick={onAddFirst}>
             Registrá tu primer gasto
-          </button>
+          </Button>
         )}
       </div>
     )

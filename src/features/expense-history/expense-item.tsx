@@ -1,4 +1,5 @@
 import { CATEGORY_LABELS } from '../../types'
+import { Button } from '../../shared/ui/button'
 import type { Expense } from '../../types'
 
 const fmt = (value: number) =>
@@ -27,10 +28,10 @@ export const ExpenseItem = ({ expense, onEdit, onDelete }: ExpenseItemProps) => 
           <span className="material-symbols-outlined">{icon}</span>
         </div>
         <div>
-          <p className="text-sm font-medium text-ds-text">
+          <p className="text-sm font-medium text-ds-text tracking-tight">
             {expense.description ?? CATEGORY_LABELS[expense.category]}
           </p>
-          <p className="text-xs text-ds-secondary">
+          <p className="text-[12px] text-ds-secondary leading-relaxed">
             {CATEGORY_LABELS[expense.category]}
             {expense.installment ? ` • Cuota ${expense.installment}` : ''}
             {' • '}
@@ -54,24 +55,23 @@ export const ExpenseItem = ({ expense, onEdit, onDelete }: ExpenseItemProps) => 
         {(onEdit || onDelete) && (
           <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
             {onEdit && (
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                size="icon"
                 aria-label={`Editar ${expense.description ?? CATEGORY_LABELS[expense.category]}`}
                 onClick={() => onEdit(expense)}
-                className="p-1.5 text-ds-secondary hover:text-primary hover:bg-surface transition-colors"
-              >
-                <span className="material-symbols-outlined text-base">edit</span>
-              </button>
+                leadingIcon="edit"
+              />
             )}
             {onDelete && (
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                size="icon"
                 aria-label={`Eliminar ${expense.description ?? CATEGORY_LABELS[expense.category]}`}
                 onClick={() => onDelete(expense.id)}
-                className="p-1.5 text-ds-secondary hover:text-red-500 hover:bg-surface transition-colors"
-              >
-                <span className="material-symbols-outlined text-base">delete</span>
-              </button>
+                className="hover:text-danger!"
+                leadingIcon="delete"
+              />
             )}
           </div>
         )}

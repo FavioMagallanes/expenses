@@ -1,5 +1,6 @@
 import { forwardRef } from 'react'
 import { CategoryPicker } from './category-picker'
+import { Button } from '../../shared/ui/button'
 import type { Category } from '../../types'
 import type { RefObject } from 'react'
 
@@ -16,7 +17,7 @@ const Field = ({
   children: React.ReactNode
 }) => (
   <div className="flex flex-col gap-1">
-    <label className="text-xs font-semibold text-ds-secondary uppercase tracking-wider">
+    <label className="text-[11px] font-semibold text-ds-secondary uppercase tracking-widest">
       {label}
     </label>
     {children}
@@ -144,22 +145,13 @@ export const ExpenseForm = ({
     {/* Acciones */}
     <div className="flex items-center justify-end gap-3 pt-2">
       {onCancel && (
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-4 py-2 rounded-lg text-sm font-medium text-ds-secondary hover:bg-surface transition-colors"
-        >
+        <Button variant="ghost" size="md" onClick={onCancel}>
           Cancelar
-        </button>
+        </Button>
       )}
-      <button
-        type="button"
-        onClick={onSubmit}
-        className="flex items-center gap-1.5 bg-primary text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
-      >
+      <Button variant="primary" size="md" trailingIcon="check" onClick={onSubmit}>
         Guardar gasto
-        <span className="material-symbols-outlined text-base">check</span>
-      </button>
+      </Button>
     </div>
   </div>
 )

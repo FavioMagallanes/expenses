@@ -42,7 +42,7 @@ const EditExpenseModalContent = ({ onClose }: { onClose: () => void }) => {
             type="button"
             aria-label="Cerrar modal"
             onClick={onClose}
-            className="text-ds-secondary hover:text-ds-text transition-colors"
+            className="size-8 inline-flex items-center justify-center rounded-lg text-ds-secondary hover:bg-surface hover:text-ds-text transition-colors"
           >
             <span className="material-symbols-outlined text-xl">close</span>
           </button>

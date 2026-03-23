@@ -71,8 +71,10 @@ const StatCard = ({
   footer?: React.ReactNode
 }) => (
   <div className="border border-ds-border rounded-xl bg-background p-5 hover:bg-[#EFEFEF] transition-colors">
-    <p className="text-xs font-semibold text-ds-secondary uppercase tracking-wider mb-2">{label}</p>
-    <p className={`text-2xl font-bold ${valueClassName}`}>{value}</p>
+    <p className="text-[11px] font-semibold text-ds-secondary uppercase tracking-widest mb-2">
+      {label}
+    </p>
+    <p className={`text-2xl font-bold tracking-tighter ${valueClassName}`}>{value}</p>
     {footer}
   </div>
 )
