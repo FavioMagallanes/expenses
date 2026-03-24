@@ -9,6 +9,7 @@ import { ExpenseForm } from './features/expense-registration/expense-form'
 import { EditExpenseModal } from './features/expense-history/edit-expense-modal'
 import { ResetButton } from './features/expense-history/reset-button'
 import { Button } from './shared/ui/button'
+import { Icon } from './shared/ui/icon'
 
 /* ─── Modal: nuevo gasto ─────────────────────────────────────────────── */
 const NewExpenseModal = () => {
@@ -27,9 +28,7 @@ const NewExpenseModal = () => {
       <div className="relative z-10 w-full sm:max-w-md bg-white border border-ds-border rounded-xl shadow-xl">
         <div className="flex items-center justify-between px-6 py-4 border-b border-ds-border">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-ds-secondary text-xl">
-              receipt_long
-            </span>
+            <Icon name="receipt-dollar" size="xl" className="text-ds-secondary" />
             <h2 className="text-base font-semibold text-ds-text">Registro rápido</h2>
           </div>
           <button
@@ -38,7 +37,7 @@ const NewExpenseModal = () => {
             onClick={closeModal}
             className="size-8 inline-flex items-center justify-center rounded-lg text-ds-secondary hover:bg-surface hover:text-ds-text transition-colors"
           >
-            <span className="material-symbols-outlined text-xl">close</span>
+            <Icon name="close" size="xl" />
           </button>
         </div>
         <div className="px-6 py-5">
@@ -87,8 +86,8 @@ const Dashboard = () => {
             <h1 className="text-3xl md:text-4xl font-bold tracking-tighter text-ds-text">
               Control de Gastos
             </h1>
-            <div className="flex items-center gap-2 text-ds-secondary text-[13px] tracking-normal">
-              <span className="material-symbols-outlined text-sm">calendar_today</span>
+            <div className="flex items-center gap-1.5 text-ds-secondary text-[13px] tracking-normal">
+              <Icon name="calendar" size="sm" />
               {new Date().toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}
             </div>
           </div>

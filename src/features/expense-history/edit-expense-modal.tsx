@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useExpenseStore } from '../../store/expense-store'
 import { useEditExpenseForm } from './use-edit-expense-form'
 import { ExpenseForm } from '../expense-registration/expense-form'
+import { Icon } from '../../shared/ui/icon'
 
 export const EditExpenseModal = () => {
   const isModalOpen = useExpenseStore(s => s.isModalOpen)
@@ -35,7 +36,7 @@ const EditExpenseModalContent = ({ onClose }: { onClose: () => void }) => {
       <div className="relative z-10 w-full sm:max-w-md bg-white border border-ds-border rounded-xl shadow-xl">
         <div className="flex items-center justify-between px-6 py-4 border-b border-ds-border">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-ds-secondary text-xl">edit_note</span>
+            <Icon name="pencil-edit" size="xl" className="text-ds-secondary" />
             <h2 className="text-base font-semibold text-ds-text">Editar gasto</h2>
           </div>
           <button
@@ -44,7 +45,7 @@ const EditExpenseModalContent = ({ onClose }: { onClose: () => void }) => {
             onClick={onClose}
             className="size-8 inline-flex items-center justify-center rounded-lg text-ds-secondary hover:bg-surface hover:text-ds-text transition-colors"
           >
-            <span className="material-symbols-outlined text-xl">close</span>
+            <Icon name="cancel" size="xl" />
           </button>
         </div>
 

@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import { Button } from '../../shared/ui/button'
+import { Icon } from '../../shared/ui/icon'
 
 interface BudgetFormProps {
   onSubmit: (amount: number) => void
@@ -35,9 +36,7 @@ export const BudgetForm = ({ onSubmit, isEditing, error }: BudgetFormProps) => {
             onChange={e => setValue(e.target.value)}
             className="w-full bg-transparent border-none p-0 outline-none text-ds-text font-medium text-sm"
           />
-          <span className="material-symbols-outlined text-ds-secondary text-base">
-            stylus_pencil
-          </span>
+          <Icon name="pencil" size="base" className="text-ds-secondary" />
         </div>
         {error && <p className="text-xs text-red-500 px-0.5">{error}</p>}
       </div>

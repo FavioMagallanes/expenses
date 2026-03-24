@@ -1,4 +1,5 @@
 import { forwardRef } from 'react'
+import { Icon } from './icon'
 
 /* ─── Variants ───────────────────────────────────────────────────────── */
 
@@ -29,9 +30,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize
   /** Full-width button */
   fullWidth?: boolean
-  /** Material Symbols icon name placed before children */
+  /** Hugeicon name placed before children */
   leadingIcon?: string
-  /** Material Symbols icon name placed after children */
+  /** Hugeicon name placed after children */
   trailingIcon?: string
 }
 
@@ -60,13 +61,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={`${base} ${variantStyles[variant]} ${sizeStyles[size]} ${fullWidth ? 'w-full' : ''} ${className}`}
         {...props}
       >
-        {leadingIcon && (
-          <span className="material-symbols-outlined text-[1em] leading-none">{leadingIcon}</span>
-        )}
+        {leadingIcon && <Icon name={leadingIcon} size="base" />}
         {children}
-        {trailingIcon && (
-          <span className="material-symbols-outlined text-[1em] leading-none">{trailingIcon}</span>
-        )}
+        {trailingIcon && <Icon name={trailingIcon} size="base" />}
       </button>
     )
   },

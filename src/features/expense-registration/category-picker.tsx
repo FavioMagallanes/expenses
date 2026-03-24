@@ -1,4 +1,5 @@
 import { CATEGORY_LABELS } from '../../types'
+import { Icon } from '../../shared/ui/icon'
 import type { Category } from '../../types'
 
 interface CategoryPickerProps {
@@ -29,8 +30,8 @@ export const CategoryPicker = ({ value, onChange }: CategoryPickerProps) => (
           </option>
         ))}
       </select>
-      <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-ds-secondary text-base pointer-events-none">
-        unfold_more
+      <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+        <Icon name="unfold-more" size="base" className="text-ds-secondary" />
       </span>
     </div>
   </div>

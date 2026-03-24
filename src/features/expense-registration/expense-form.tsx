@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 import { CategoryPicker } from './category-picker'
 import { Button } from '../../shared/ui/button'
+import { Icon } from '../../shared/ui/icon'
 import type { Category } from '../../types'
 import type { RefObject } from 'react'
 
@@ -134,7 +135,7 @@ export const ExpenseForm = ({
     {/* Pro-tip */}
     {showInstallments && (
       <div className="flex items-start gap-2 bg-blue-50 rounded-lg px-3 py-2.5">
-        <span className="material-symbols-outlined text-primary text-base mt-0.5">info</span>
+        <Icon name="info" size="base" className="text-primary mt-0.5" />
         <p className="text-xs text-ds-secondary leading-relaxed">
           <span className="font-semibold text-ds-text">Pro tip:</span> Escribí "1/6" en cuotas para
           indicar que pagás la cuota 1 de 6 este mes.

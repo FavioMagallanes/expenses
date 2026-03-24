@@ -1,15 +1,16 @@
 import { CATEGORY_LABELS } from '../../types'
 import { Button } from '../../shared/ui/button'
+import { Icon } from '../../shared/ui/icon'
 import type { Expense } from '../../types'
 
 const fmt = (value: number) =>
   new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value)
 
 const CATEGORY_ICON: Record<string, { icon: string; bg: string; fg: string }> = {
-  BBVA: { icon: 'credit_card', bg: 'bg-blue-100', fg: 'text-blue-600' },
-  SUPERVIELLE: { icon: 'credit_card', bg: 'bg-violet-100', fg: 'text-violet-600' },
-  PRESTAMO: { icon: 'account_balance', bg: 'bg-orange-100', fg: 'text-orange-600' },
-  OTROS: { icon: 'payments', bg: 'bg-green-100', fg: 'text-green-600' },
+  BBVA: { icon: 'credit-card', bg: 'bg-blue-100', fg: 'text-blue-600' },
+  SUPERVIELLE: { icon: 'credit-card', bg: 'bg-violet-100', fg: 'text-violet-600' },
+  PRESTAMO: { icon: 'money', bg: 'bg-orange-100', fg: 'text-orange-600' },
+  OTROS: { icon: 'payment', bg: 'bg-green-100', fg: 'text-green-600' },
 }
 
 interface ExpenseItemProps {
@@ -25,7 +26,7 @@ export const ExpenseItem = ({ expense, onEdit, onDelete }: ExpenseItemProps) => 
     <div className="flex items-center justify-between p-3 border border-ds-border rounded-lg hover:bg-[#EFEFEF] transition-colors group cursor-pointer">
       <div className="flex items-center gap-4">
         <div className={`size-10 ${bg} ${fg} rounded-lg flex items-center justify-center shrink-0`}>
-          <span className="material-symbols-outlined">{icon}</span>
+          <Icon name={icon} size="xl" />
         </div>
         <div>
           <p className="text-sm font-medium text-ds-text tracking-tight">

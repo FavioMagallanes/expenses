@@ -1,3 +1,5 @@
+import { Icon } from '../../shared/ui/icon'
+
 const fmt = (value: number) =>
   new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value)
 
@@ -39,9 +41,7 @@ export const BudgetSummary = ({
           <p
             className={`text-xs mt-6 font-medium flex items-center gap-1 ${isOverBudget ? 'text-red-500' : 'text-green-600'}`}
           >
-            <span className="material-symbols-outlined text-xs">
-              {isOverBudget ? 'trending_down' : 'trending_up'}
-            </span>
+            <Icon name={isOverBudget ? 'trending-down' : 'trending-up'} size="sm" />
             {isOverBudget ? 'Superaste el presupuesto' : 'En línea este mes'}
           </p>
         }
