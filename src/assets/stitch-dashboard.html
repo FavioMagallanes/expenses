@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Expense Tracker Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Public+Sans:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2383E2",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#191919",
+                        "surface": "#F7F7F5",
+                        "notion-text": "#37352F",
+                        "notion-secondary": "#73726E",
+                        "notion-border": "#E1E1E1",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #37352F;
+        }
+        .notion-card {
+            border: 1px solid #E1E1E1;
+            transition: background 0.2s ease;
+        }
+        .notion-card:hover {
+            background-color: #EFEFEF;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 border-r border-notion-border bg-surface flex flex-col p-4 gap-2">
+<div class="flex items-center gap-2 px-2 py-3 mb-4">
+<div class="size-6 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">payments</span>
+</div>
+<span class="font-semibold text-notion-text">Expense Tracker</span>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-1.5 rounded-lg bg-black/5 text-notion-text font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="layout">mobile_layout</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-3 py-1.5 rounded-lg text-notion-secondary hover:bg-black/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="arrows_left_right">arrow_left</span>
+                    Transactions
+                </a>
+<a class="flex items-center gap-3 px-3 py-1.5 rounded-lg text-notion-secondary hover:bg-black/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="wallet">wallet</span>
+                    Budgets
+                </a>
+<a class="flex items-center gap-3 px-3 py-1.5 rounded-lg text-notion-secondary hover:bg-black/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="chart_pie_slice">pie_chart</span>
+                    Reports
+                </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-notion-border flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-1.5 rounded-lg text-notion-secondary hover:bg-black/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="gear">search_gear</span>
+                    Settings
+                </a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-background-light px-8 md:px-16 py-12">
+<div class="max-w-4xl mx-auto">
+<!-- Header -->
+<header class="mb-10">
+<div class="flex items-center justify-between mb-2">
+<h1 class="text-4xl font-bold tracking-tight text-notion-text">Monthly Budget</h1>
+<div class="flex items-center gap-2 text-notion-secondary text-sm">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+                            October 2023
+                        </div>
+</div>
+<div class="flex items-center gap-4 mt-6">
+<div class="relative flex-1 max-w-xs">
+<label class="block text-xs font-semibold text-notion-secondary uppercase tracking-wider mb-1 px-1">Set Target</label>
+<div class="flex items-center border border-notion-border rounded-lg px-3 py-2 bg-surface focus-within:ring-1 focus-within:ring-primary/50 transition-all">
+<span class="text-notion-secondary mr-2">$</span>
+<input class="w-full bg-transparent border-none p-0 focus:ring-0 text-notion-text font-medium" placeholder="0.00" type="text" value="2,500.00"/>
+<span class="material-symbols-outlined text-notion-secondary text-base cursor-pointer" data-icon="pencil">stylus_pencil</span>
+</div>
+</div>
+<div class="flex flex-col justify-end h-full">
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-primary/90 transition-colors h-[42px] mt-[18px]">
+                                Update
+                            </button>
+</div>
+</div>
+</header>
+<!-- Summary Dashboard -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+<div class="notion-card p-5 rounded-xl bg-background-light">
+<p class="text-xs font-semibold text-notion-secondary uppercase tracking-wider mb-2">Spent</p>
+<p class="text-2xl font-bold text-notion-text">$1,840.50</p>
+<div class="mt-4 h-2 bg-notion-border rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 74%"></div>
+</div>
+<p class="text-xs text-notion-secondary mt-2">74% of monthly budget</p>
+</div>
+<div class="notion-card p-5 rounded-xl bg-background-light">
+<p class="text-xs font-semibold text-notion-secondary uppercase tracking-wider mb-2">Remaining</p>
+<p class="text-2xl font-bold text-notion-text">$659.50</p>
+<p class="text-xs text-green-600 mt-6 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span>
+                            On track this month
+                        </p>
+</div>
+<div class="notion-card p-5 rounded-xl bg-background-light">
+<p class="text-xs font-semibold text-notion-secondary uppercase tracking-wider mb-2">Daily Average</p>
+<p class="text-2xl font-bold text-notion-text">$59.37</p>
+<p class="text-xs text-notion-secondary mt-6">Target: &lt; $80.00</p>
+</div>
+</section>
+<!-- Transactions Overview -->
+<section>
+<div class="flex items-center justify-between mb-4 border-b border-notion-border pb-2">
+<h2 class="text-lg font-semibold text-notion-text">Recent Transactions</h2>
+<button class="text-sm text-primary font-medium hover:underline">View All</button>
+</div>
+<div class="space-y-1">
+<!-- Transaction Item -->
+<div class="flex items-center justify-between p-3 notion-card rounded-lg group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="size-10 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div>
+<p class="text-sm font-medium text-notion-text">Starbucks Coffee</p>
+<p class="text-xs text-notion-secondary">Food &amp; Drinks • Oct 24, 2023</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-semibold text-notion-text">-$6.50</p>
+<p class="text-[10px] text-notion-secondary uppercase font-bold tracking-tighter">Personal</p>
+</div>
+</div>
+<!-- Transaction Item -->
+<div class="flex items-center justify-between p-3 notion-card rounded-lg group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="size-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">shopping_bag</span>
+</div>
+<div>
+<p class="text-sm font-medium text-notion-text">Amazon Prime Subscription</p>
+<p class="text-xs text-notion-secondary">Services • Oct 23, 2023</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-semibold text-notion-text">-$14.99</p>
+<p class="text-[10px] text-notion-secondary uppercase font-bold tracking-tighter">Fixed</p>
+</div>
+</div>
+<!-- Transaction Item -->
+<div class="flex items-center justify-between p-3 notion-card rounded-lg group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="size-10 bg-green-100 text-green-600 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">commute</span>
+</div>
+<div>
+<p class="text-sm font-medium text-notion-text">Shell Gas Station</p>
+<p class="text-xs text-notion-secondary">Transport • Oct 22, 2023</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-semibold text-notion-text">-$54.20</p>
+<p class="text-[10px] text-notion-secondary uppercase font-bold tracking-tighter">Essential</p>
+</div>
+</div>
+<!-- Transaction Item -->
+<div class="flex items-center justify-between p-3 notion-card rounded-lg group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="size-10 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<div>
+<p class="text-sm font-medium text-notion-text">Equinox Gym</p>
+<p class="text-xs text-notion-secondary">Health • Oct 21, 2023</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-semibold text-notion-text">-$120.00</p>
+<p class="text-[10px] text-notion-secondary uppercase font-bold tracking-tighter">Health</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-8 right-8 size-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform active:scale-95 z-50">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<!-- User Profile Quick Actions -->
+<div class="fixed top-4 right-8 flex items-center gap-3">
+<button class="size-8 flex items-center justify-center text-notion-secondary hover:bg-black/5 rounded">
+<span class="material-symbols-outlined text-[20px]" data-icon="magnifying_glass">magnification_large</span>
+</button>
+<button class="size-8 flex items-center justify-center text-notion-secondary hover:bg-black/5 rounded relative">
+<span class="material-symbols-outlined text-[20px]" data-icon="bell">doorbell</span>
+<span class="absolute top-1.5 right-1.5 size-2 bg-red-500 rounded-full border border-white"></span>
+</button>
+<div class="size-8 rounded-full overflow-hidden border border-notion-border">
+<img class="size-full object-cover" data-alt="User profile avatar with minimalist design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBRv80Vshj4nTVPDrO-Vhq-HGaENuhR8aZDHg2m-CDs0Q3ml2F6oXu5qqoOlM92ixC6kB-IQfJ2l5hiYkC7d7ixTfrd680PqPF1kx4LdV-5sFZroElDSs5Wxh_TGZoZxRcEozSOrQBOaVTJhNZ3W1bgfh8cevMx1ZH2dD-dFuQz8YsxJuEVzaJDkqpgI99uindwVp_32n0OuZ6UTWeuRKl6MNpCbP1vR8cfWMXlhEU0V1n3SoobpHH1OcyztLUH3qvcYfkshcQrnRY"/>
+</div>
+</div>
+</div>
+</body></html>

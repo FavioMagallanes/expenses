@@ -1,0 +1,26 @@
+# Concepto Visual (Estética, paleta de colores, tipografía)
+- Estética: Minimalismo funcional basado en "bloques". Espaciado generoso (8px grid system) y bordes sutiles (1px solid #E1E1E1).
+- Paleta de Colores (Modo Claro):
+  - Fondo: #FFFFFF / Superficie: #F7F7F5 (Gris Notion).
+  - Texto Primario: #37352F / Texto Secundario: #73726E.
+  - Acento (Acciones): #2383E2 (Azul suave) o #0B6E99.
+- Paleta de Colores (Modo Oscuro):
+  - Fondo: #191919 / Superficie: #202020.
+  - Texto Primario: #FFFFFF / Texto Secundario: #9B9B9B.
+- Tipografía: Inter o Segoe UI. Pesos: 400 (Regular), 600 (Semi-bold). Tamaños: 14px cuerpo, 12px captions, 18px encabezados.
+# User Journey (UX) (Flujo del usuario y puntos de contacto)
+1. Setup Inicial: El usuario define un "Presupuesto Mensual" en un campo destacado tipo 'Header'.
+2. Registro Rápido: Botón flotante (+) o línea de comando "/nuevo" que abre un modal minimalista.
+3. Clasificación Dinámica: Al seleccionar "Tarjeta", se despliega condicionalmente el selector de cuotas (Input numérico: "X de Y").
+4. Gestión de Historial: Lista cronológica con hover states que revelan opciones de 'Editar' o 'Eliminar' (evitando saturación visual).
+5. Reset Total: Ubicado en configuración o al final de la página con doble confirmación (Destructive Action).
+# Sistema de Componentes (Definición de elementos clave)
+- Átomos: Iconografía lineal (Lucide Icons), Inputs sin bordes marcados (estilo Notion), Badges de estado para los tipos de gasto (BBVA, Supervielle, Préstamo).
+- Moléculas: Card de Gasto con indicador de cuotas (ej: "50% completado" o "Cuota 2/6"). Selector de categorías con búsqueda rápida.
+- Organismos: Dashboard de Resumen (Barra de progreso del presupuesto vs. gasto real). Tabla de gastos con scroll infinito o paginación sutil.
+- Microinteracciones: Skeleton screens durante la carga de datos. Feedback visual de "Guardado" mediante un pequeño check verde efímero.
+# Reglas de Accesibilidad (Especificaciones técnicas de cumplimiento)
+- Contraste: Garantizar que el texto #73726E sobre #F7F7F5 cumpla ratio 4.5:1.
+- Foco: Indicadores de foco claramente visibles (outline azul de 2px) para navegación por teclado.
+- Etiquetas: Uso de aria-labels en botones de edición/borrado que solo tienen iconos.
+- Touch Targets: En versión móvil, todos los elementos interactivos deben tener un área mínima de 44x44px.

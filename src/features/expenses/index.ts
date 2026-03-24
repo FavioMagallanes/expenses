@@ -1,0 +1,13 @@
+// Expenses feature — public API
+export { ExpenseForm } from './components/expense-form'
+export { ExpenseItem } from './components/expense-item'
+export { ExpenseList } from './components/expense-list'
+export { CategoryPicker } from './components/category-picker'
+export { NewExpenseModal } from './components/new-expense-modal'
+export { EditExpenseModal } from './components/edit-expense-modal'
+export { ResetButton } from './components/reset-button'
+export { useExpenseForm } from './hooks/use-expense-form'
+export { useEditExpenseForm } from './hooks/use-edit-expense-form'
+export { useExpenses } from './hooks/use-expenses'
+export { ExpenseFormProvider } from './context/expense-form-provider'
+export { useExpenseFormContext } from './context/expense-form-context'

@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+
+/* Dark mode activado por clase .dark en <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Design System — The Digital Ledger (aligned with Stitch) */
+  --color-background: #ffffff;
+  --color-surface: #f7f7f5;
+  --color-surface-container-low: #f7f7f5;
+  --color-primary: #2383e2;
+  --color-primary-hover: #1a6fc7;
+  --color-ds-border: #e1e1e1;
+  --color-ds-text: #37352f;
+  --color-ds-secondary: #73726e;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+
+  /* Dark mode semantic tokens */
+  --color-dark-bg: #191919;
+  --color-dark-surface: #252525;
+  --color-dark-border: #333333;
+  --color-dark-text: #ebebeb;
+  --color-dark-secondary: #9b9b9b;
+  --color-dark-hover: #2f2f2f;
+
+  /* Border radius — aligned with Stitch */
+  --radius-DEFAULT: 0.25rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+
+  /* Typography scale — tighter tracking for headings */
+  --letter-spacing-tighter: -0.03em;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: -0.01em;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background-color: #ffffff;
+  color: #37352f;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+}
+
+.dark body,
+body.dark {
+  background-color: var(--color-dark-bg);
+  color: var(--color-dark-text);
+}
+
+#root {
+  min-height: 100svh;
+}
+
+/* Hide number input spinners */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
