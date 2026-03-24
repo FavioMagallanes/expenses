@@ -1,5 +1,5 @@
 import { toast } from 'sonner'
-import { Button } from '../../shared/ui/button'
+import { Button } from '../../../shared/ui/button'
 
 interface ResetButtonProps {
   onConfirm: () => void

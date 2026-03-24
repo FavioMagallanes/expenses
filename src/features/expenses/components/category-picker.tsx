@@ -1,6 +1,6 @@
-import { CATEGORY_LABELS } from '../../types'
-import { Icon } from '../../shared/ui/icon'
-import type { Category } from '../../types'
+import { CATEGORY_LABELS } from '../../../types'
+import { Icon } from '../../../shared/ui/icon'
+import type { Category } from '../../../types'
 
 interface CategoryPickerProps {
   value: Category

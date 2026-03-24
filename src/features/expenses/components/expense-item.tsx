@@ -1,7 +1,7 @@
-import { CATEGORY_LABELS } from '../../types'
-import { Button } from '../../shared/ui/button'
-import { Icon } from '../../shared/ui/icon'
-import type { Expense } from '../../types'
+import { CATEGORY_LABELS } from '../../../types'
+import { Button } from '../../../shared/ui/button'
+import { Icon } from '../../../shared/ui/icon'
+import type { Expense } from '../../../types'
 
 const fmt = (value: number) =>
   new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value)

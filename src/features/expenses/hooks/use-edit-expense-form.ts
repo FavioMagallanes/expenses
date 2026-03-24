@@ -1,45 +1,38 @@
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { useExpenseStore } from '../../store/expense-store'
-import { isCardCategory } from '../../types'
-import type { Category } from '../../types'
+import { useExpenseStore } from '../../../store/expense-store'
+import { isCardCategory } from '../../../types'
+import type { Expense, Category } from '../../../types'
 
-/**
- * Estado del formulario de registro de gastos.
- *
- * - `totalAmount` → Monto que se paga **este mes** (la cuota, no el total del bien).
- * - `installment` → Texto libre con formato "X/Y" (ej: "1/6").
- *                    Solo visible si la categoría es tarjeta.
- */
-interface ExpenseFormState {
+interface EditFormState {
   description: string
   category: Category
   totalAmount: string
   installment: string
 }
 
-const INITIAL_STATE: ExpenseFormState = {
-  description: '',
-  category: 'OTROS',
-  totalAmount: '',
-  installment: '',
-}
+const toFormState = (expense: Expense): EditFormState => ({
+  description: expense.description ?? '',
+  category: expense.category,
+  totalAmount: String(expense.totalAmount),
+  installment: expense.installment ?? '',
+})
 
-export const useExpenseForm = (onSuccess?: () => void) => {
-  const addExpense = useExpenseStore(s => s.addExpense)
-  const [fields, setFields] = useState<ExpenseFormState>(INITIAL_STATE)
-  const [errors, setErrors] = useState<Partial<Record<keyof ExpenseFormState, string>>>({})
+export const useEditExpenseForm = (expense: Expense, onSuccess?: () => void) => {
+  const updateExpense = useExpenseStore(s => s.updateExpense)
+  const [fields, setFields] = useState<EditFormState>(() => toFormState(expense))
+  const [errors, setErrors] = useState<Partial<Record<keyof EditFormState, string>>>({})
   const amountRef = useRef<HTMLInputElement>(null)
 
   const showInstallments = isCardCategory(fields.category)
 
-  const setField = <K extends keyof ExpenseFormState>(key: K, value: ExpenseFormState[K]) => {
+  const setField = <K extends keyof EditFormState>(key: K, value: EditFormState[K]) => {
     setFields(prev => ({ ...prev, [key]: value }))
     if (errors[key]) setErrors(prev => ({ ...prev, [key]: undefined }))
   }
 
   const validate = (): boolean => {
-    const next: Partial<Record<keyof ExpenseFormState, string>> = {}
+    const next: Partial<Record<keyof EditFormState, string>> = {}
     const amount = parseFloat(fields.totalAmount)
 
     if (!fields.totalAmount || isNaN(amount) || amount <= 0)
@@ -55,16 +48,14 @@ export const useExpenseForm = (onSuccess?: () => void) => {
   const handleSubmit = () => {
     if (!validate()) return
 
-    addExpense({
+    updateExpense(expense.id, {
       description: fields.description || undefined,
       category: fields.category,
       totalAmount: parseFloat(fields.totalAmount),
       installment: showInstallments ? fields.installment.trim() : undefined,
     })
 
-    setFields(INITIAL_STATE)
-    setErrors({})
-    toast.success('Gasto registrado correctamente')
+    toast.success('Gasto actualizado')
     onSuccess?.()
   }
 

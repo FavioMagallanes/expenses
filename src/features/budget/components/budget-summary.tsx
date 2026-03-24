@@ -1,4 +1,4 @@
-import { Icon } from '../../shared/ui/icon'
+import { Icon } from '../../../shared/ui/icon'
 
 const fmt = (value: number) =>
   new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value)

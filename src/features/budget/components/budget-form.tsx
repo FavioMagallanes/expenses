@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from 'react'
-import { Button } from '../../shared/ui/button'
-import { Icon } from '../../shared/ui/icon'
+import { Button } from '../../../shared/ui/button'
+import { Icon } from '../../../shared/ui/icon'
 
 interface BudgetFormProps {
   onSubmit: (amount: number) => void

@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
-import { useExpenseStore } from '../../store/expense-store'
-import type { Expense } from '../../types'
+import { useExpenseStore } from '../../../store/expense-store'
+import type { Expense } from '../../../types'
 
 export const useExpenses = () => {
   const expenses = useExpenseStore(s => s.expenses)

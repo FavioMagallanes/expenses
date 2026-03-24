@@ -1,5 +1,5 @@
 import { toast } from 'sonner'
-import { useExpenseStore } from '../../store/expense-store'
+import { useExpenseStore } from '../../../store/expense-store'
 
 export const useBudget = () => {
   const budget = useExpenseStore(s => s.budget)

@@ -1,7 +1,7 @@
 import { ExpenseItem } from './expense-item'
-import { Button } from '../../shared/ui/button'
-import { Icon } from '../../shared/ui/icon'
-import type { Expense } from '../../types'
+import { Button } from '../../../shared/ui/button'
+import { Icon } from '../../../shared/ui/icon'
+import type { Expense } from '../../../types'
 
 interface ExpenseListProps {
   expenses: Expense[]
