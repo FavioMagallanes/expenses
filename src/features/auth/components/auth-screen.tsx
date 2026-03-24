@@ -60,7 +60,7 @@ export const AuthScreen = () => {
             <Icon name="receipt-dollar" size="2xl" className="text-primary" />
           </div>
           <h1 className="text-2xl font-bold tracking-tighter text-ds-text dark:text-dark-text">
-            Control de Presupuesto
+            Gastly
           </h1>
           <p className="text-ds-secondary dark:text-dark-secondary text-[13px] mt-1">
             {isLogin ? 'Iniciá sesión para continuar' : 'Creá tu cuenta para empezar'}
