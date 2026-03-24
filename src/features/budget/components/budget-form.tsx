@@ -20,7 +20,7 @@ export const BudgetForm = ({ onSubmit, isEditing }: BudgetFormProps) => {
     <form onSubmit={handleSubmit} className="flex items-end gap-3">
       <div className="flex flex-col gap-1 flex-1 max-w-xs">
         <label className="text-[11px] font-semibold text-ds-secondary dark:text-dark-secondary uppercase tracking-widest px-0.5">
-          Establecer objetivo
+          Ingresar presupuesto del mes
         </label>
         <div className="flex items-center border border-ds-border dark:border-dark-border rounded-lg bg-surface dark:bg-dark-surface px-3 py-2 gap-2 transition-all focus-within:ring-1 focus-within:ring-primary/50">
           <span className="text-ds-secondary dark:text-dark-secondary text-sm">$</span>

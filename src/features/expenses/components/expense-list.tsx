@@ -20,11 +20,11 @@ export const ExpenseList = ({ expenses, onEdit, onDelete, onAddFirst }: ExpenseL
           className="text-ds-secondary dark:text-dark-secondary"
         />
         <p className="text-sm text-ds-secondary dark:text-dark-secondary leading-relaxed">
-          Todavía no hay gastos registrados este mes.
+          Todavía no hay gastos cargados.
         </p>
         {onAddFirst && (
           <Button variant="link" size="sm" onClick={onAddFirst}>
-            Registrá tu primer gasto
+            Registrá
           </Button>
         )}
       </div>

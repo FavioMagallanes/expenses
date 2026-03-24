@@ -20,14 +20,14 @@ export const Dashboard = () => {
           <div className="flex items-start justify-between">
             <div className="flex-col items-center mb-2">
               <h1 className="text-3xl md:text-4xl font-bold tracking-tighter leading-none text-ds-text dark:text-dark-text">
-                Control de Gastos
+                Control de Presupuesto
               </h1>
               <div className="flex items-center gap-1.5 text-ds-secondary dark:text-dark-secondary text-[13px] tracking-normal">
                 <Icon name="calendar" size="sm" />
                 {new Date().toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}
               </div>
             </div>
-            <div className="flex items-center gap-2 mt-0.5">
+            <div className="flex items-center gap-2 mt-0.5 md:mt-2">
               <ThemeToggle />
             </div>
           </div>
@@ -58,7 +58,7 @@ export const Dashboard = () => {
         <section>
           <div className="mb-4 border-b border-ds-border dark:border-dark-border pb-2">
             <h2 className="text-lg font-semibold tracking-tight text-ds-text dark:text-dark-text">
-              Movimientos recientes
+              Gastos del mes
             </h2>
           </div>
 

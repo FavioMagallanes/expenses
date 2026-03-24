@@ -49,7 +49,7 @@ export const BudgetSummary = ({
         }
       />
       <StatCard
-        label="Presupuesto mensual"
+        label="Presupuesto"
         value={fmt(budgetAmount)}
         footer={
           <p className="text-xs text-ds-secondary dark:text-dark-secondary mt-6">
