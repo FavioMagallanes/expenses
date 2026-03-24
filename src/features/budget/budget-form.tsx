@@ -31,7 +31,7 @@ export const BudgetForm = ({ onSubmit, isEditing }: BudgetFormProps) => {
             placeholder="0.00"
             value={value}
             onChange={e => setValue(e.target.value)}
-            className="w-full bg-transparent border-none p-0 outline-none text-ds-text font-medium text-sm"
+            className="w-full bg-transparent border-none p-0 outline-none text-ds-text font-medium text-sm placeholder:text-ds-secondary/60 placeholder:font-normal"
           />
           <Icon name="pencil" size="base" className="text-ds-secondary" />
         </div>

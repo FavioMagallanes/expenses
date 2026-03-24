@@ -41,7 +41,7 @@ const StitchInput = forwardRef<
     <input
       ref={ref}
       {...props}
-      className="w-full bg-transparent border-none p-0 outline-none text-ds-text font-medium text-sm placeholder:text-ds-secondary/50"
+      className="w-full bg-transparent border-none p-0 outline-none text-ds-text font-medium text-sm placeholder:text-ds-secondary/60 placeholder:font-normal"
     />
   </div>
 ))
