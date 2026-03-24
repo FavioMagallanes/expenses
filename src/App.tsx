@@ -1,17 +1,48 @@
 import { useExpenseStore } from './store/expense-store'
 import { Dashboard } from './features/dashboard'
 import { NewExpenseModal, EditExpenseModal } from './features/expenses'
+import { AuthProvider, AuthScreen, useAuth } from './features/auth'
 import { Button } from './shared/ui/button'
 import { ThemeProvider } from './shared/ui/theme-provider'
 import { useTheme } from './shared/hooks/use-theme'
 import { Toaster } from 'sonner'
 
-/* ─── App content (dentro de ThemeProvider) ──────────────────────────── */
+/* ─── App content (dentro de AuthProvider + ThemeProvider) ───────────── */
 const AppContent = () => {
+  const { user, loading } = useAuth()
   const isModalOpen = useExpenseStore(s => s.isModalOpen)
   const editingExpense = useExpenseStore(s => s.editingExpense)
   const openModal = useExpenseStore(s => s.openModal)
   const { theme } = useTheme()
+
+  /* Loading spinner mientras se verifica la sesión */
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-dark-bg flex items-center justify-center transition-colors">
+        <div className="text-ds-secondary dark:text-dark-secondary text-[13px]">Cargando...</div>
+      </div>
+    )
+  }
+
+  /* Si no hay usuario autenticado → pantalla de login */
+  if (!user) {
+    return (
+      <>
+        <AuthScreen />
+        <Toaster
+          position="bottom-center"
+          richColors
+          theme={theme}
+          toastOptions={{
+            style: {
+              fontFamily: "'Inter', system-ui, sans-serif",
+              fontSize: '13px',
+            },
+          }}
+        />
+      </>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg transition-colors">
@@ -48,7 +79,9 @@ const AppContent = () => {
 /* ─── App root ───────────────────────────────────────────────────────── */
 const App = () => (
   <ThemeProvider>
-    <AppContent />
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   </ThemeProvider>
 )
 

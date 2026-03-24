@@ -1,24 +1,30 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: (template) → 1.0.0; amended 1.0.0 → 1.0.1; amended 1.0.1 → 1.0.2
+Version change: (template) → 1.0.0; amended 1.0.0 → 1.0.1; amended 1.0.1 → 1.0.2; amended 1.0.2 → 2.0.0 (MAJOR)
 Added principles:
   - I. Precisión Matemática
-  - II. Privacidad de Datos
+  - II. Privacidad de Datos (AMENDED v2.0.0: permitir cloud storage con condiciones)
   - III. UX de Entrada Rápida
   - IV. Estado Predictivo
   - V. Código Limpio
 Added sections:
-  - Restricciones Técnicas
+  - Restricciones Técnicas (AMENDED v2.0.0: Supabase como backend cloud)
   - Flujo de Desarrollo
   - Governance
-Removed sections: none (initial ratification)
+Removed sections: none
 Templates requiring updates:
   ✅ .specify/memory/constitution.md (este archivo)
   ⚠ .specify/templates/plan-template.md — verificar alineación con principios I y IV
   ⚠ .specify/templates/spec-template.md — verificar secciones de privacidad y validaciones numéricas
   ⚠ .specify/templates/tasks-template.md — asegurar tipos de tarea para cálculos financieros y privacidad
 Deferred TODOs: ninguno
+
+AMENDMENT v2.0.0 — Justificación:
+  El usuario necesita acceso multi-dispositivo (PC + móvil) a sus reportes mensuales.
+  localStorage no sincroniza entre dispositivos. Supabase provee PostgreSQL + Auth + RLS
+  bajo modelo open-source. Se mantiene cifrado y control del usuario sobre sus datos
+  mediante Row Level Security (cada usuario solo ve sus propios datos).
 -->
 
 # Expense Tracker Constitution
@@ -43,14 +49,19 @@ Todos los cálculos de saldos, cuotas e intereses DEBEN producir resultados exac
 Los datos financieros del usuario DEBEN permanecer bajo su control exclusivo y nunca exponerse a
 terceros sin consentimiento explícito.
 
-- Todos los datos DEBEN almacenarse **localmente** (dispositivo del usuario o almacenamiento
-  cifrado bajo su control); ningún dato financiero puede enviarse a servidores externos por defecto.
-- Los datos en reposo DEBEN cifrarse usando un algoritmo estándar reconocido (ej. AES-256).
-- La aplicación NO DEBE requerir autenticación en línea para su funcionamiento principal.
+- Los datos PUEDEN almacenarse en un backend cloud (Supabase) siempre que:
+  1. Se requiera autenticación (email + contraseña) para acceder.
+  2. Se aplique Row Level Security (RLS) para que cada usuario solo acceda a sus propios datos.
+  3. Se mantenga una capa de caché local (localStorage/Zustand persist) para funcionamiento
+     offline del mes activo.
+- Los datos en tránsito DEBEN usar HTTPS (garantizado por Supabase).
+- La aplicación DEBE seguir funcionando para el mes activo sin conexión a internet
+  (el cierre de mes y consulta de reportes históricos SÍ requieren conexión).
 - Cualquier exportación de datos DEBE advertir al usuario sobre el contenido sensible antes de
   proceder.
 - Las dependencias de terceros DEBEN auditarse antes de incorporarse; las que realicen telemetría
-  o envíen datos a la red están **prohibidas** salvo justificación documentada y aprobada.
+  o envíen datos a la red están **prohibidas** salvo justificación documentada y aprobada
+  (`@supabase/supabase-js` queda aprobada como dependencia de cloud storage).
 
 ### III. UX de Entrada Rápida
 
@@ -98,15 +109,16 @@ mantenibilidad sobre la brevedad.
 
 ## Restricciones Técnicas
 
-- **Almacenamiento**: SQLite local o equivalente off-line first; sin bases de datos en la nube
-  por defecto.
+- **Almacenamiento**: Supabase (PostgreSQL) como backend cloud + localStorage como caché local
+  para el mes activo. Zustand persist mantiene el estado del mes actual offline.
+- **Autenticación**: Supabase Auth con email + contraseña.
+- **Seguridad**: Row Level Security (RLS) en todas las tablas; cada usuario solo accede a sus datos.
 - **Aritmética**: Biblioteca de aritmética decimal/enteros para todos los cálculos monetarios
   (ej. `decimal.js`, `big.js`, o equivalente nativo del lenguaje).
-- **Cifrado**: AES-256-GCM para datos en reposo; la clave DEBE derivarse de credenciales del
-  usuario mediante PBKDF2 o Argon2.
 - **Dependencias externas**: Cada nueva dependencia DEBE justificarse en el PR que la introduce
   (propósito, tamaño, política de privacidad); las de telemetría están prohibidas.
-- **Compatibilidad**: La aplicación DEBE funcionar completamente sin conexión a internet.
+- **Compatibilidad offline**: El mes activo (budget + gastos) funciona sin conexión.
+  El cierre de mes y consulta de reportes históricos requieren conexión.
 
 ## Flujo de Desarrollo
 
@@ -132,4 +144,4 @@ cualquier decisión de diseño o implementación individual.
 - Ante ambigüedad en la interpretación de un principio, prevalece la lectura más restrictiva
   hasta que una enmienda formal la aclare.
 
-**Version**: 1.0.2 | **Ratified**: 2026-03-23 | **Last Amended**: 2026-03-23
+**Version**: 2.0.0 | **Ratified**: 2026-03-23 | **Last Amended**: 2026-03-24
