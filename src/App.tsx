@@ -89,6 +89,7 @@ const Dashboard = () => {
           {/* Budget form */}
           <div className="mt-6">
             <BudgetForm
+              key={budget ? 'editing' : 'new'}
               onSubmit={budget ? handleEditBudget : handleSetBudget}
               isEditing={!!budget}
             />
@@ -109,19 +110,10 @@ const Dashboard = () => {
 
         {/* Transactions */}
         <section>
-          <div className="flex items-center justify-between mb-4 border-b border-ds-border pb-2">
+          <div className="mb-4 border-b border-ds-border pb-2">
             <h2 className="text-lg font-semibold tracking-tight text-ds-text">
               Movimientos recientes
             </h2>
-            <Button
-              variant="primary"
-              size="sm"
-              leadingIcon="add"
-              onClick={openModal}
-              className="hidden md:inline-flex"
-            >
-              Nuevo gasto
-            </Button>
           </div>
 
           <ExpenseList
@@ -132,10 +124,20 @@ const Dashboard = () => {
           />
         </section>
 
-        {/* Footer reset */}
-        <div className="flex justify-end mt-8 pt-4 border-t border-ds-border">
-          <ResetButton onConfirm={resetAll} />
-        </div>
+        {/* Footer actions */}
+        {budget && (
+          <div className="flex items-center justify-between mt-8 pt-4 border-t border-ds-border">
+            <ResetButton onConfirm={resetAll} />
+            <Button
+              variant="primary"
+              size="icon"
+              aria-label="Nuevo gasto"
+              onClick={openModal}
+              leadingIcon="add"
+              className="hidden md:inline-flex"
+            />
+          </div>
+        )}
       </div>
     </main>
   )
