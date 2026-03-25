@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAuth } from '../context/auth-context'
 import { Button } from '../../../shared/ui/button'
 import { toast } from 'sonner'
+import { useTheme } from '../../../shared/hooks/use-theme'
 
 type AuthMode = 'login' | 'signup'
 
@@ -12,7 +13,22 @@ export const AuthScreen = () => {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const { isDark } = useTheme()
+
   const isLogin = mode === 'login'
+
+  // Clases condicionales según tema
+  const cardBase =
+    'relative flex w-full max-w-sm flex-col justify-between p-6 md:p-8 border rounded-lg shadow-sm'
+  const cardTheme = isDark
+    ? 'bg-dark-surface border-dark-border text-dark-text'
+    : 'bg-white border-gray-200 text-gray-900'
+  const labelClass = isDark
+    ? 'block text-[13px] font-medium text-ds-text mb-2'
+    : 'block text-[13px] font-medium text-gray-700 mb-2'
+  const inputClass = isDark
+    ? 'w-full h-12 px-4 rounded-lg border bg-dark-surface text-ds-text placeholder:text-ds-secondary outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors border-dark-border'
+    : 'w-full h-12 px-4 rounded-lg border bg-white text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors border-gray-300'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,39 +68,26 @@ export const AuthScreen = () => {
 
   return (
     <div className="relative flex h-screen w-full items-center justify-center overflow-hidden px-6 md:px-8">
-      <div
-        className={[
-          'relative flex w-full max-w-sm flex-col justify-between p-6 md:p-8 border border-[#232329] bg-[radial-gradient(50%_80%_at_20%_0%,#232329_0%,transparent_100%)]',
-          'dark:bg-[radial-gradient(50%_80%_at_20%_0%,#232329_0%,transparent_100%)]',
-        ].join(' ')}
-      >
-        {/* Bordes absolutos */}
-        <div className="absolute -inset-y-6 -left-px w-px bg-[#3f3f46]" />
-        <div className="absolute -inset-y-6 -right-px w-px bg-[#3f3f46]" />
-        <div className="absolute -inset-x-6 -top-px h-px bg-[#3f3f46]" />
-        <div className="absolute -inset-x-6 -bottom-px h-px bg-[#3f3f46]" />
-
-        {/* + esquina superior izquierda */}
-        <div className="absolute left-0 top-0 -translate-x-px -translate-y-3 w-px h-6 bg-[#a1a1aa]" />
-        <div className="absolute left-0 top-0 -translate-x-3 -translate-y-px h-px w-6 bg-[#a1a1aa]" />
-        {/* + esquina inferior derecha */}
-        <div className="absolute right-0 bottom-0 translate-x-px translate-y-3 w-px h-6 bg-[#a1a1aa]" />
-        <div className="absolute right-0 bottom-0 translate-x-3 translate-y-px h-px w-6 bg-[#a1a1aa]" />
+      <div className={[cardBase, cardTheme].join(' ')}>
+        {/* Bordes absolutos decorativos (mantener para estilo) */}
+        <div className="absolute -inset-y-6 -left-px w-px bg-ds-border dark:bg-dark-border" />
+        <div className="absolute -inset-y-6 -right-px w-px bg-ds-border dark:bg-dark-border" />
+        <div className="absolute -inset-x-6 -top-px h-px bg-ds-border dark:bg-dark-border" />
+        <div className="absolute -inset-x-6 -bottom-px h-px bg-ds-border dark:bg-dark-border" />
 
         <div className="w-full max-w-sm animate-in space-y-8">
           <div className="flex flex-col space-y-1 items-center">
-            <h1 className="font-bold text-2xl tracking-wide text-white">Gastly</h1>
-            <p className="text-base text-[#b3b3c0]">
+            <h1 className="font-bold text-2xl tracking-wide text-ds-text dark:text-dark-text">
+              Gastly
+            </h1>
+            <p className="text-base text-ds-secondary dark:text-dark-secondary">
               {isLogin ? 'Iniciá sesión para continuar' : 'Creá tu cuenta para empezar'}
             </p>
           </div>
           <div className="space-y-4">
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-[13px] font-medium text-[#e5e5ee] mb-2"
-                >
+                <label htmlFor="email" className={labelClass}>
                   Email
                 </label>
                 <input
@@ -95,14 +98,11 @@ export const AuthScreen = () => {
                   placeholder="tu@email.com"
                   autoComplete="email"
                   autoFocus
-                  className="w-full h-12 px-4 rounded-lg border border-[#232329] bg-[#232329] text-[#e5e5ee] placeholder:text-[#b3b3c0] text-[15px] outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
+                  className={inputClass}
                 />
               </div>
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-[13px] font-medium text-[#e5e5ee] mb-2"
-                >
+                <label htmlFor="password" className={labelClass}>
                   Contraseña
                 </label>
                 <input
@@ -112,7 +112,7 @@ export const AuthScreen = () => {
                   onChange={e => setPassword(e.target.value)}
                   placeholder="Mínimo 6 caracteres"
                   autoComplete={isLogin ? 'current-password' : 'new-password'}
-                  className="w-full h-12 px-4 rounded-lg border border-[#232329] bg-[#232329] text-[#e5e5ee] placeholder:text-[#b3b3c0] text-[15px] outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
+                  className={inputClass}
                 />
               </div>
               <Button
