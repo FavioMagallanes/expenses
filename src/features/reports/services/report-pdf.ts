@@ -1,6 +1,6 @@
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import { CATEGORY_LABELS } from '../../../types'
+import { CATEGORY_LABELS, CATEGORIES } from '../../../types'
 import type { Expense } from '../../../types'
 import type { MonthlyReport } from '../../../types/database'
 
@@ -45,12 +45,18 @@ export const generateReportPdf = (report: MonthlyReport, expenses: Expense[]): B
   autoTable(doc, {
     startY: 38,
     head: [['Descripción', 'Categoría', 'Cuota', 'Monto']],
-    body: expenses.map(expense => [
-      expense.description || CATEGORY_LABELS[expense.category],
-      CATEGORY_LABELS[expense.category],
-      expense.installment ?? '—',
-      fmt(expense.totalAmount),
-    ]),
+    body: expenses.map(expense => {
+      const cat = CATEGORIES.find(c => c.id === expense.categoryId)
+      const label = CATEGORY_LABELS[expense.categoryId] ?? expense.categoryId
+      const categoryText =
+        cat?.requiresBank && expense.banco ? `${label} · ${expense.banco}` : label
+      return [
+        expense.description || label,
+        categoryText,
+        expense.installment ?? '—',
+        fmt(expense.totalAmount),
+      ]
+    }),
     foot: [['', '', 'Total', fmt(total)]],
     theme: 'striped',
     headStyles: {

@@ -3,6 +3,7 @@ import { useExpenseFormContext } from '../context/expense-form-context'
 import { CategoryPicker } from './category-picker'
 import { Button } from '../../../shared/ui/button'
 import { Icon } from '../../../shared/ui/icon'
+import { BANKS_AR } from '../../../types'
 
 const Field = ({
   label,
@@ -51,7 +52,7 @@ interface ExpenseFormProps {
 }
 
 export const ExpenseForm = ({ onCancel }: ExpenseFormProps) => {
-  const { fields, errors, showInstallments, amountRef, setField, handleSubmit } =
+  const { fields, errors, showInstallments, amountRef, setField, handleSubmit, requiresBank } =
     useExpenseFormContext()
 
   return (
@@ -82,7 +83,7 @@ export const ExpenseForm = ({ onCancel }: ExpenseFormProps) => {
 
       <div className="flex gap-3">
         <div className={showInstallments ? 'flex-1' : 'w-full'}>
-          <CategoryPicker value={fields.category} onChange={v => setField('category', v)} />
+          <CategoryPicker value={fields.categoryId} onChange={v => setField('categoryId', v)} />
         </div>
         {showInstallments && (
           <div className="flex-1">
@@ -113,12 +114,39 @@ export const ExpenseForm = ({ onCancel }: ExpenseFormProps) => {
         )}
       </div>
 
+      {requiresBank && (
+        <Field label="Banco" error={errors.banco}>
+          <div className="relative">
+            <select
+              value={fields.banco}
+              onChange={e => setField('banco', e.target.value)}
+              className="w-full appearance-none border border-ds-border dark:border-dark-border rounded-lg bg-surface dark:bg-dark-surface px-3 py-2.5 pr-10 text-sm outline-none transition-all focus:ring-1 focus:ring-primary/50 cursor-pointer [&>option]:font-normal [&>option]:text-ds-text [&>option]:bg-white dark:[&>option]:text-dark-text dark:[&>option]:bg-dark-surface"
+              required
+            >
+              <option value="">Seleccioná un banco</option>
+              {BANKS_AR.map(banco => (
+                <option key={banco} value={banco}>
+                  {banco}
+                </option>
+              ))}
+            </select>
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <Icon
+                name="unfold-more"
+                size="base"
+                className="text-ds-secondary dark:text-dark-secondary"
+              />
+            </span>
+          </div>
+        </Field>
+      )}
+
       {showInstallments && (
         <div className="flex items-start gap-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg px-3 py-2.5">
           <Icon name="info" size="base" className="text-primary mt-0.5" />
           <p className="text-xs text-ds-secondary dark:text-dark-secondary leading-relaxed">
             <span className="font-semibold text-ds-text dark:text-dark-text">Pro tip:</span> Indicá
-            la cuota actual y el total (ej: 1 de 6).
+            la cuota currente y el total (ej: 1 de 6).
           </p>
         </div>
       )}

@@ -1,8 +1,7 @@
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useExpenseStore } from '../../../store/expense-store'
-import { isCardCategory } from '../../../types'
-import type { Category } from '../../../types'
+import { CATEGORIES } from '../../../types'
 
 /**
  * Estado del formulario de registro de gastos.
@@ -13,18 +12,20 @@ import type { Category } from '../../../types'
  */
 interface ExpenseFormState {
   description: string
-  category: Category
+  categoryId: string
   totalAmount: string
   currentInstallment: string
   totalInstallments: string
+  banco: string // nuevo campo
 }
 
 const INITIAL_STATE: ExpenseFormState = {
   description: '',
-  category: 'OTROS',
+  categoryId: 'otros',
   totalAmount: '',
   currentInstallment: '',
   totalInstallments: '',
+  banco: '',
 }
 
 export const useExpenseForm = (onSuccess?: () => void) => {
@@ -33,12 +34,17 @@ export const useExpenseForm = (onSuccess?: () => void) => {
   const [errors, setErrors] = useState<Partial<Record<keyof ExpenseFormState, string>>>({})
   const amountRef = useRef<HTMLInputElement>(null)
 
-  const showInstallments = isCardCategory(fields.category)
+  // Definir showInstallments en línea según el tipo de categoría
+  const categoryObj = CATEGORIES.find(c => c.id === fields.categoryId)
+  const showInstallments = categoryObj?.type === 'credit_card'
 
   const setField = <K extends keyof ExpenseFormState>(key: K, value: ExpenseFormState[K]) => {
     setFields(prev => ({ ...prev, [key]: value }))
     if (errors[key]) setErrors(prev => ({ ...prev, [key]: undefined }))
   }
+
+  // Utilidad para saber si la categoría requiere banco
+  const requiresBank = !!categoryObj?.requiresBank
 
   const validate = (): boolean => {
     const next: Partial<Record<keyof ExpenseFormState, string>> = {}
@@ -46,6 +52,8 @@ export const useExpenseForm = (onSuccess?: () => void) => {
 
     if (!fields.totalAmount || isNaN(amount) || amount <= 0)
       next.totalAmount = 'Ingresá un monto válido mayor a 0'
+
+    if (requiresBank && !fields.banco) next.banco = 'Seleccioná un banco'
 
     if (showInstallments) {
       const current = parseInt(fields.currentInstallment)
@@ -67,11 +75,12 @@ export const useExpenseForm = (onSuccess?: () => void) => {
 
     addExpense({
       description: fields.description || undefined,
-      category: fields.category,
+      categoryId: fields.categoryId,
       totalAmount: parseFloat(fields.totalAmount),
       installment: showInstallments
         ? `${fields.currentInstallment}/${fields.totalInstallments}`
         : undefined,
+      banco: requiresBank ? fields.banco : undefined,
     })
 
     setFields(INITIAL_STATE)
@@ -87,5 +96,6 @@ export const useExpenseForm = (onSuccess?: () => void) => {
     amountRef,
     setField,
     handleSubmit,
+    requiresBank,
   }
 }
