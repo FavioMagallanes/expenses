@@ -32,16 +32,19 @@ export const Dashboard = () => {
   )
 
   return (
-    <main className="min-h-screen bg-white dark:bg-dark-bg flex justify-center py-12 transition-colors">
-      <div className="w-full max-w-4xl px-6 md:px-16">
+    <main className="min-h-screen bg-background dark:bg-dark-bg flex justify-center py-12 transition-colors relative">
+      {/* Fondo técnico con patrón de cuadrícula */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-[0.4] dark:opacity-[0.2] pointer-events-none" />
+
+      <div className="w-full max-w-4xl px-6 md:px-16 relative z-10">
         {/* Header */}
         <header className="mb-10">
           <div className="flex items-start justify-between">
             <div className="flex-col items-center mb-2">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tighter leading-none text-ds-text dark:text-dark-text">
-                Control de Presupuesto
+              <h1 className="text-2xl md:text-3xl font-bold tracking-[0.15em] leading-none text-ds-text dark:text-dark-text uppercase">
+                Gastly<span className="text-primary">.</span>
               </h1>
-              <div className="flex items-center gap-1.5 text-ds-secondary dark:text-dark-secondary text-[13px] tracking-normal">
+              <div className="flex items-center gap-1.5 text-ds-secondary dark:text-dark-secondary text-[12px] tracking-wide uppercase mt-2 font-medium">
                 <Icon name="calendar" size="sm" />
                 {currentMonth}
               </div>
@@ -94,9 +97,9 @@ export const Dashboard = () => {
         <section>
           <div className="mb-4 border-b border-ds-border dark:border-dark-border pb-2 flex items-center justify-between">
             <h2 className="text-lg font-semibold tracking-tight text-ds-text dark:text-dark-text">
-              Gastos del mes
+              Gastly<span className="text-primary">.</span> ledger
             </h2>
-            {budget && (
+            {budget && expenses.length > 0 && (
               <Button
                 variant="primary"
                 size="sm"
@@ -107,13 +110,15 @@ export const Dashboard = () => {
                 Nuevo gasto
               </Button>
             )}
-          </div>
+            </div>
+
 
           <ExpenseList
             expenses={expenses}
             onEdit={handleEdit}
             onDelete={handleDelete}
             onAddFirst={openModal}
+            hasBudget={!!budget}
           />
         </section>
 

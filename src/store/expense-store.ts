@@ -87,11 +87,17 @@ export const useExpenseStore = create<ExpenseStore>()(
   ),
 )
 
+let lastUserId: string | undefined = undefined
+
 /**
  * Rehidrata el store con la storage key del usuario autenticado.
  * Debe llamarse al hacer login/logout para aislar datos por usuario.
  */
 export const rehydrateStore = (userId?: string) => {
+  // Evitar rehidratar si el usuario es el mismo (corrige bug de pérdida de datos al cambiar pestaña)
+  if (userId === lastUserId) return
+  lastUserId = userId
+
   const storageKey = getStorageKey(userId)
 
   // Actualizar la key de persistencia y rehidratar
