@@ -1,6 +1,5 @@
-import { CATEGORIES, CATEGORY_LABELS } from '../../../types'
+import { CATEGORY_LABELS } from '../../../types'
 import { Button } from '../../../shared/ui/button'
-import { Icon } from '../../../shared/ui/icon'
 import { formatCurrency } from '../../../core/math/format'
 import type { Expense } from '../../../types'
 
@@ -12,8 +11,6 @@ interface ExpenseItemProps {
 
 export const ExpenseItem = ({ expense, onEdit, onDelete }: ExpenseItemProps) => {
   const categoryId = expense.categoryId
-  const category = CATEGORIES.find(c => c.id === categoryId)
-  const color = category?.color ?? '#e5e7eb'
   const label = CATEGORY_LABELS[categoryId] ?? 'Otros'
 
   return (
