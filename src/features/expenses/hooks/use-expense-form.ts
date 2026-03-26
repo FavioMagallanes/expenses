@@ -2,24 +2,10 @@ import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useExpenseStore } from '../../../store/expense-store'
 import { CATEGORIES } from '../../../types'
+import { validateExpense } from '../utils/validation'
+import type { ExpenseFormFields, ExpenseErrors } from '../utils/validation'
 
-/**
- * Estado del formulario de registro de gastos.
- *
- * - `totalAmount` → Monto que se paga **este mes** (la cuota, no el total del bien).
- * - `installment` → Texto libre con formato "X/Y" (ej: "1/6").
- *                    Solo visible si la categoría es tarjeta.
- */
-interface ExpenseFormState {
-  description: string
-  categoryId: string
-  totalAmount: string
-  currentInstallment: string
-  totalInstallments: string
-  banco: string // nuevo campo
-}
-
-const INITIAL_STATE: ExpenseFormState = {
+const INITIAL_STATE: ExpenseFormFields = {
   description: '',
   categoryId: 'otros',
   totalAmount: '',
@@ -30,44 +16,40 @@ const INITIAL_STATE: ExpenseFormState = {
 
 export const useExpenseForm = (onSuccess?: () => void) => {
   const addExpense = useExpenseStore(s => s.addExpense)
-  const [fields, setFields] = useState<ExpenseFormState>(INITIAL_STATE)
-  const [errors, setErrors] = useState<Partial<Record<keyof ExpenseFormState, string>>>({})
+  const [fields, setFields] = useState<ExpenseFormFields>(INITIAL_STATE)
+  const [errors, setErrors] = useState<ExpenseErrors>({})
   const amountRef = useRef<HTMLInputElement>(null)
 
-  // Definir showInstallments en línea según el tipo de categoría
   const categoryObj = CATEGORIES.find(c => c.id === fields.categoryId)
   const showInstallments = categoryObj?.type === 'credit_card'
+  const requiresBank = !!categoryObj?.requiresBank
 
-  const setField = <K extends keyof ExpenseFormState>(key: K, value: ExpenseFormState[K]) => {
-    setFields(prev => ({ ...prev, [key]: value }))
+  const setField = <K extends keyof ExpenseFormFields>(key: K, value: ExpenseFormFields[K]) => {
+    setFields(prev => {
+      const next = { ...prev, [key]: value }
+      
+      // Limpiar campos específicos si cambia la categoría
+      if (key === 'categoryId') {
+        const newCat = CATEGORIES.find(c => c.id === value)
+        if (newCat?.type !== 'credit_card') {
+          next.currentInstallment = ''
+          next.totalInstallments = ''
+        }
+        if (!newCat?.requiresBank) {
+          next.banco = ''
+        }
+      }
+      
+      return next
+    })
+    
     if (errors[key]) setErrors(prev => ({ ...prev, [key]: undefined }))
   }
 
-  // Utilidad para saber si la categoría requiere banco
-  const requiresBank = !!categoryObj?.requiresBank
-
   const validate = (): boolean => {
-    const next: Partial<Record<keyof ExpenseFormState, string>> = {}
-    const amount = parseFloat(fields.totalAmount)
-
-    if (!fields.totalAmount || isNaN(amount) || amount <= 0)
-      next.totalAmount = 'Ingresá un monto válido mayor a 0'
-
-    if (requiresBank && !fields.banco) next.banco = 'Seleccioná un banco'
-
-    if (showInstallments) {
-      const current = parseInt(fields.currentInstallment)
-      const total = parseInt(fields.totalInstallments)
-      if (!fields.currentInstallment || isNaN(current) || current < 1)
-        next.currentInstallment = 'Cuota actual inválida'
-      if (!fields.totalInstallments || isNaN(total) || total < 1)
-        next.totalInstallments = 'Total de cuotas inválido'
-      if (current > total && !next.currentInstallment && !next.totalInstallments)
-        next.currentInstallment = 'No puede superar el total'
-    }
-
-    setErrors(next)
-    return Object.keys(next).length === 0
+    const nextErrors = validateExpense(fields, requiresBank, showInstallments)
+    setErrors(nextErrors)
+    return Object.keys(nextErrors).length === 0
   }
 
   const handleSubmit = () => {

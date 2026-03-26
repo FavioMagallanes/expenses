@@ -147,16 +147,20 @@
 
 ## Phase 8: Polish y Criterios de Éxito
 
-**Purpose**: Validar criterios de aceptación del spec.md antes de dar por terminada la implementación.
+**Purpose**: Validar criterios de aceptación del spec.md y asegurar la calidad del código según la Constitución.
 
-- [ ] T036 [P] Validar SC-001 — recorrer el flujo "monto → tarjeta → cuotas → confirmar" contando interacciones; ajustar UX si supera 4 pasos
-- [ ] T037 [P] Validar SC-002 — medir tiempo desde confirmación de gasto hasta actualización visible del saldo; debe ser ≤ 300 ms (sin animaciones bloqueantes)
-- [ ] T038 [P] Validar SC-003 — revisar manualmente en code review: `calcMontoCuota(1200000, 3) === 400000`; `calcMontoCuota(100, 3) === 34` (half-up); `calcMontoCuota(100, 1) === 100`
-- [ ] T039 [P] Validar SC-004 — desconectar red y verificar que todas las funciones principales operan sin errores
-- [ ] T040 [P] Validar SC-005 — auditar con DevTools Network que no hay fetch/XHR saliente en ningún flujo
-- [ ] T041 [P] Validar SC-006 — confirmar que no hay camino para invocar `resetAll()` sin pasar por la confirmación secundaria
-- [ ] T042 [P] Validar SC-007 — revisar que cada campo numérico inválido muestra un mensaje específico (no genérico)
+- [x] T036 [P] Validar SC-001 — recorrer el flujo "monto → tarjeta → cuotas → confirmar" contando interacciones; ajustar UX si supera 4 pasos
+- [x] T037 [P] Validar SC-002 — medir tiempo desde confirmación de gasto hasta actualización visible del saldo; debe ser ≤ 300 ms (sin animaciones bloqueantes)
+- [x] T038 [P] Validar SC-003 — revisar manualmente en code review: `calcMontoCuota(1200000, 3) === 400000`; `calcMontoCuota(100, 3) === 34` (half-up); `calcMontoCuota(100, 1) === 100`
+- [x] T039 [P] Validar SC-004 — desconectar red y verificar que todas las funciones principales operan sin errores
+- [x] T040 [P] Validar SC-005 — auditar con DevTools Network que no hay fetch/XHR saliente en ningún flujo
+- [x] T041 [P] Validar SC-006 — confirmar que no hay camino para invocar `resetAll()` sin pasar por la confirmación secundaria
+- [x] T042 [P] Validar SC-007 — revisar que cada campo numérico inválido muestra un mensaje específico (no genérico)
 - [ ] T043 Ejecutar linter y formatter: `npm run lint && npm run format:check`; corregir cualquier violación antes del merge
+- [x] T048 [Refactor] Hacer `isCardCategory` recursivo para soportar futuras subcategorías (Principio V)
+- [x] T049 [Refactor] Extraer lógica de validación de gastos a `src/features/expenses/utils/validation.ts` (Principio V)
+- [x] T050 [Refactor] Unificar renderizado de modales en `App.tsx` para optimizar suscripciones al store (Principio IV)
+- [x] T051 [UX] Asegurar foco automático en campo de monto en todos los modales (Principio III)
 
 **Checkpoint**: Todos los Success Criteria del spec.md verificados. Listo para merge.
 

@@ -44,8 +44,9 @@ const AppContent = () => {
     <div className="min-h-screen bg-white dark:bg-dark-bg transition-colors">
       <Dashboard />
 
-      {isModalOpen && !editingExpense && <NewExpenseModal />}
-      <EditExpenseModal />
+      {isModalOpen && (
+        <>{editingExpense ? <EditExpenseModal /> : <NewExpenseModal />}</>
+      )}
 
       <Toaster
         position="bottom-right"

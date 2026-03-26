@@ -6,11 +6,10 @@ import { ExpenseForm } from './expense-form'
 import { Modal } from '../../../shared/ui/modal'
 
 export const EditExpenseModal = () => {
-  const isModalOpen = useExpenseStore(s => s.isModalOpen)
   const editingExpense = useExpenseStore(s => s.editingExpense)
   const closeModal = useExpenseStore(s => s.closeModal)
 
-  if (!isModalOpen || !editingExpense) return null
+  if (!editingExpense) return null
 
   return <EditExpenseModalContent key={editingExpense.id} onClose={closeModal} />
 }

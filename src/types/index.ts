@@ -219,8 +219,11 @@ export interface MonthlySummary {
   isOverBudget: boolean
 }
 
-export const isCardCategory = (id?: string) => {
+export const isCardCategory = (id?: string, categories: Category[] = CATEGORIES): boolean => {
   if (!id) return false
-  const c = CATEGORIES.find(x => x.id === id)
-  return c?.type === 'credit_card'
+  for (const c of categories) {
+    if (c.id === id) return c.type === 'credit_card'
+    if (c.subcategories && isCardCategory(id, c.subcategories)) return true
+  }
+  return false
 }
