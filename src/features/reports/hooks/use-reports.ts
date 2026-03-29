@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { MonthlyReport } from '../../../types/database'
+import { getPlanMonthContext } from '../../../core/date/plan-month-labels'
 import { fetchReports, closeMonth, deleteReport, updateReport } from '../services/report-service'
 import type { ReportInsert, ReportUpdatePayload } from '../services/report-service'
+import { LEDGER_SEALED_HINT } from '../../../core/copy/ledger-sealed-hint'
+import { isLedgerCycleReported } from '../utils/is-ledger-cycle-reported'
 import { useAuth } from '../../auth'
 import { toast } from 'sonner'
 
@@ -70,6 +73,16 @@ export const useReports = () => {
 
   const handleCloseMonth = useCallback(
     async (report: ReportInsert, onSuccess?: () => void) => {
+      const { data: latest, error: fetchErr } = await fetchReports()
+      if (fetchErr) {
+        toast.error(`No se pudo verificar reportes: ${fetchErr}`)
+        return
+      }
+      const { ledgerMonthLabel, paymentMonthLabel } = getPlanMonthContext()
+      if (isLedgerCycleReported(latest, ledgerMonthLabel, paymentMonthLabel)) {
+        toast.error(LEDGER_SEALED_HINT)
+        return
+      }
       const { error } = await closeMonth(report)
       if (error) {
         toast.error(`Error al cerrar el mes: ${error}`)

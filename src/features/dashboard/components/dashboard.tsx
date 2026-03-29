@@ -10,8 +10,10 @@ import { useReports, ReportList, CloseMonthModal, ReportDetailModal } from '../.
 import { useAuth } from '../../auth'
 import { Button } from '../../../shared/ui/button'
 import { getPlanMonthContext } from '../../../core/date/plan-month-labels'
+import { isLedgerCycleReported } from '../../reports/utils/is-ledger-cycle-reported'
 import { DashboardHeader } from './dashboard-header'
 import { PlannedMonthSection } from './planned-month-section'
+import { LEDGER_SEALED_HINT } from '../../../core/copy/ledger-sealed-hint'
 
 export const Dashboard = () => {
   const { budget, remainingBalance, totalSpent, isOverBudget, handleSetBudget } = useBudget()
@@ -28,6 +30,10 @@ export const Dashboard = () => {
   const { signOut } = useAuth()
   const openModal = useExpenseStore(state => state.openModal)
   const resetAll = useExpenseStore(state => state.resetAll)
+  const plannedExpenses = useExpenseStore(state => state.plannedExpenses)
+  const plannedBudget = useExpenseStore(state => state.plannedBudget)
+  const hasPlanInProgress =
+    plannedExpenses.length > 0 || plannedBudget !== null
 
   const [showCloseMonthModal, setShowCloseMonthModal] = useState(false)
   const [showReports, setShowReports] = useState(false)
@@ -37,6 +43,11 @@ export const Dashboard = () => {
     () => getPlanMonthContext(),
     [],
   )
+
+  const isLedgerSealed =
+    !reportsLoading &&
+    isLedgerCycleReported(reports, ledgerMonthLabel, paymentMonthLabel)
+  const isLedgerActionsLocked = reportsLoading || isLedgerSealed
 
   return (
     <main className="min-h-screen bg-background dark:bg-dark-bg flex justify-center py-12 transition-colors relative">
@@ -52,6 +63,8 @@ export const Dashboard = () => {
             onTogglePlannedPanel={() => setShowPlanned(prev => !prev)}
             onToggleReportsPanel={() => setShowReports(prev => !prev)}
             onSignOut={signOut}
+            showLedgerClosedDot={isLedgerSealed}
+            showPlanActiveDot={hasPlanInProgress}
           />
           <div className="mt-6">
             <BudgetForm
@@ -59,6 +72,7 @@ export const Dashboard = () => {
               onSubmit={handleSetBudget}
               isEditing={!!budget}
               initialValue={budget?.amount}
+              disabled={isLedgerActionsLocked}
             />
           </div>
         </div>
@@ -79,7 +93,7 @@ export const Dashboard = () => {
             <h2 className="text-lg font-semibold tracking-tight text-ds-text dark:text-dark-text">
               Gastly<span className="text-primary">.</span> ledger
             </h2>
-            {budget && expenses.length > 0 && (
+            {budget && expenses.length > 0 && !isLedgerActionsLocked && (
               <Button
                 variant="primary"
                 size="sm"
@@ -92,6 +106,12 @@ export const Dashboard = () => {
             )}
           </div>
 
+          {isLedgerSealed && (
+            <p className="text-[12px] text-ds-secondary dark:text-dark-secondary mb-3 max-w-2xl leading-relaxed text-pretty">
+              {LEDGER_SEALED_HINT}
+            </p>
+          )}
+
           <ExpenseList
             expenses={expenses}
             listCaption={`Ledger · cargás en ${ledgerMonthLabel} · liquidación ${paymentMonthLabel}`}
@@ -99,6 +119,10 @@ export const Dashboard = () => {
             onDelete={handleDelete}
             onAddFirst={openModal}
             hasBudget={!!budget}
+            canAddExpenses={!isLedgerActionsLocked}
+            ledgerReadOnly={isLedgerActionsLocked}
+            suppressEmptyDescription={isLedgerSealed}
+            hideEmptyState={isLedgerSealed}
           />
         </section>
 
@@ -121,7 +145,14 @@ export const Dashboard = () => {
                 size="sm"
                 onClick={() => setShowCloseMonthModal(true)}
                 leadingIcon="check"
-                disabled={!budget || expenses.length === 0}
+                disabled={!budget || expenses.length === 0 || isLedgerActionsLocked}
+                title={
+                  reportsLoading
+                    ? 'Cargando reportes…'
+                    : isLedgerSealed
+                      ? LEDGER_SEALED_HINT
+                      : undefined
+                }
               >
                 Cerrar mes
               </Button>

@@ -10,6 +10,10 @@ type DashboardHeaderProps = {
   onTogglePlannedPanel: () => void
   onToggleReportsPanel: () => void
   onSignOut: () => void
+  /** Punto en el ícono del plan: hay presupuesto o gastos planificados. */
+  showPlanActiveDot?: boolean
+  /** Punto en Reportes: el periodo actual está cerrado (ledger bloqueado). */
+  showLedgerClosedDot?: boolean
 }
 
 export const DashboardHeader = ({
@@ -19,6 +23,8 @@ export const DashboardHeader = ({
   onTogglePlannedPanel,
   onToggleReportsPanel,
   onSignOut,
+  showPlanActiveDot = false,
+  showLedgerClosedDot = false,
 }: DashboardHeaderProps) => {
   return (
     <header>
@@ -37,23 +43,35 @@ export const DashboardHeader = ({
         <div className="flex items-center gap-1 mt-0.5 md:mt-2">
           <button
             type="button"
-            aria-label={`Plan a pagar en ${planTargetMonthName}`}
+            aria-label={`Plan a pagar en ${planTargetMonthName}${showPlanActiveDot ? '. Tenés plan en curso' : ''}`}
             onClick={onTogglePlannedPanel}
-            className={`size-8 inline-flex items-center justify-center rounded-lg transition-colors cursor-pointer ${
+            className={`relative size-8 inline-flex items-center justify-center rounded-lg transition-colors cursor-pointer ${
               isPlannedPanelOpen
                 ? 'bg-primary/15 text-primary'
                 : 'text-ds-secondary dark:text-dark-secondary hover:bg-surface dark:hover:bg-dark-hover hover:text-ds-text dark:hover:text-dark-text'
             }`}
           >
             <Icon name="calendar-check" size="xl" />
+            {showPlanActiveDot && (
+              <span
+                className="absolute top-0.5 right-0.5 size-1.5 rounded-full bg-emerald-500 ring-1 ring-background dark:ring-dark-bg"
+                aria-hidden
+              />
+            )}
           </button>
           <button
             type="button"
-            aria-label="Ver reportes anteriores"
+            aria-label={`Ver reportes anteriores${showLedgerClosedDot ? '. Período cerrado' : ''}`}
             onClick={onToggleReportsPanel}
-            className="size-8 inline-flex items-center justify-center rounded-lg text-ds-secondary dark:text-dark-secondary hover:bg-surface dark:hover:bg-dark-hover hover:text-ds-text dark:hover:text-dark-text transition-colors cursor-pointer"
+            className="relative size-8 inline-flex items-center justify-center rounded-lg text-ds-secondary dark:text-dark-secondary hover:bg-surface dark:hover:bg-dark-hover hover:text-ds-text dark:hover:text-dark-text transition-colors cursor-pointer"
           >
             <Icon name="archive" size="xl" />
+            {showLedgerClosedDot && (
+              <span
+                className="absolute top-px right-px size-1.5 rounded-full bg-amber-500 ring-1 ring-background dark:ring-dark-bg"
+                aria-hidden
+              />
+            )}
           </button>
           <ThemeToggle />
           <button
