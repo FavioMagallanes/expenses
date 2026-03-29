@@ -1,58 +1,106 @@
+import { HugeiconsIcon, type IconSvgElement } from '@hugeicons/react'
 import {
-  ReceiptText,
-  X,
-  Calendar,
-  Pencil,
-  Trash2,
-  Plus,
-  Check,
-  Sun,
-  Moon,
-  LogOut,
-  Archive,
-  Download,
-  Share2,
-  ShoppingBag,
-  Home,
-  Shirt,
-  Briefcase,
-  BookOpen,
-  Car,
-  Utensils,
-  Settings,
-  RefreshCcw,
-  Calculator,
-  CalendarCheck,
-} from 'lucide-react'
+  Add01Icon,
+  ArchiveIcon,
+  ArrowDownRight01Icon,
+  ArrowUpRight01Icon,
+  Bone01Icon,
+  BookOpen01Icon,
+  Briefcase01Icon,
+  Building02Icon,
+  Bus01Icon,
+  CalculatorIcon,
+  Calendar03Icon,
+  CalendarCheckIn01Icon,
+  Call02Icon,
+  Cancel01Icon,
+  CreditCardIcon,
+  Delete02Icon,
+  DollarCircleIcon,
+  Download01Icon,
+  DropletIcon,
+  Edit02Icon,
+  FireIcon,
+  FlashIcon,
+  GameController01Icon,
+  HeartAddIcon,
+  Home01Icon,
+  InformationCircleIcon,
+  Invoice01Icon,
+  Logout01Icon,
+  Moon02Icon,
+  MoreHorizontalIcon,
+  PencilEdit02Icon,
+  PiggyBankIcon,
+  ReceiptDollarIcon,
+  ReloadIcon,
+  Restaurant01Icon,
+  Settings02Icon,
+  Share01Icon,
+  Shield01Icon,
+  ShoppingBasket02Icon,
+  Sun03Icon,
+  Tick02Icon,
+  TShirtIcon,
+  UnfoldMoreIcon,
+  Wifi01Icon,
+} from '@hugeicons/core-free-icons'
 
-// Mapeo estricto de iconos
+/** Claves usadas por la app y por `CATEGORIES` en `types`. */
 const iconMap = {
-  'receipt-dollar': ReceiptText,
-  cancel: X,
-  close: X,
-  calendar: Calendar,
-  edit: Pencil,
-  delete: Trash2,
-  add: Plus,
-  check: Check,
-  'calendar-check': CalendarCheck,
-  calculator: Calculator,
-  clean: RefreshCcw,
-  sun: Sun,
-  moon: Moon,
-  logout: LogOut,
-  archive: Archive,
-  download: Download,
-  share: Share2,
-  shopping: ShoppingBag,
-  home: Home,
-  cloth: Shirt,
-  work: Briefcase,
-  education: BookOpen,
-  car: Car,
-  food: Utensils,
-  other: Settings,
-}
+  'receipt-dollar': ReceiptDollarIcon,
+  cancel: Cancel01Icon,
+  close: Cancel01Icon,
+  calendar: Calendar03Icon,
+  edit: Edit02Icon,
+  'pencil-edit': PencilEdit02Icon,
+  delete: Delete02Icon,
+  add: Add01Icon,
+  check: Tick02Icon,
+  'calendar-check': CalendarCheckIn01Icon,
+  calculator: CalculatorIcon,
+  clean: ReloadIcon,
+  sun: Sun03Icon,
+  moon: Moon02Icon,
+  logout: Logout01Icon,
+  archive: ArchiveIcon,
+  download: Download01Icon,
+  share: Share01Icon,
+  shopping: ShoppingBasket02Icon,
+  home: Home01Icon,
+  cloth: TShirtIcon,
+  tshirt: TShirtIcon,
+  work: Briefcase01Icon,
+  education: BookOpen01Icon,
+  car: Bus01Icon,
+  food: Restaurant01Icon,
+  other: Settings02Icon,
+  info: InformationCircleIcon,
+  'trending-down': ArrowDownRight01Icon,
+  'trending-up': ArrowUpRight01Icon,
+  'unfold-more': UnfoldMoreIcon,
+  building: Building02Icon,
+  bolt: FlashIcon,
+  fire: FireIcon,
+  droplet: DropletIcon,
+  wifi: Wifi01Icon,
+  phone: Call02Icon,
+  shield: Shield01Icon,
+  'shopping-cart': ShoppingBasket02Icon,
+  utensils: Restaurant01Icon,
+  bus: Bus01Icon,
+  heart: HeartAddIcon,
+  book: BookOpen01Icon,
+  paw: Bone01Icon,
+  gamepad: GameController01Icon,
+  'credit-card': CreditCardIcon,
+  'dollar-sign': DollarCircleIcon,
+  'piggy-bank': PiggyBankIcon,
+  'file-invoice-dollar': Invoice01Icon,
+  'dots-horizontal': MoreHorizontalIcon,
+} as const satisfies Record<string, IconSvgElement>
+
+export type IconName = keyof typeof iconMap
 
 interface IconProps {
   name: string
@@ -61,13 +109,19 @@ interface IconProps {
 }
 
 export const Icon = ({ name, size = 'base', className = '' }: IconProps) => {
-  // Aceptamos string y verificamos existencia contra el map
-  const LucideIcon = iconMap[name as keyof typeof iconMap] || iconMap.other
-  const sizeMap = { sm: 14, base: 16, xl: 20 }
+  const icon = iconMap[name as IconName] ?? iconMap.other
+  const sizeMap = { sm: 14, base: 16, xl: 20 } as const
+  const px = sizeMap[size] ?? 16
 
   return (
-    <span className={`inline-flex items-center justify-center ${className}`}>
-      <LucideIcon size={sizeMap[size as keyof typeof sizeMap] || 16} strokeWidth={2} />
+    <span className={`inline-flex items-center justify-center shrink-0 ${className}`}>
+      <HugeiconsIcon
+        icon={icon}
+        size={px}
+        color="currentColor"
+        strokeWidth={1.75}
+        className="shrink-0"
+      />
     </span>
   )
 }

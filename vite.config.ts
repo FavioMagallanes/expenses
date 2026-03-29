@@ -19,7 +19,7 @@ export default defineConfig({
             )
               return 'pdf-vendors'
             // Íconos/graphics
-            if (id.includes('lucide-react')) return 'icons'
+            if (id.includes('@hugeicons/core-free-icons')) return 'icons'
             // Librerías grandes comunes
             return 'vendor'
           }
