@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { MonthlyReport } from '../../../types/database'
-import { fetchReports, closeMonth, deleteReport } from '../services/report-service'
-import type { ReportInsert } from '../services/report-service'
+import { fetchReports, closeMonth, deleteReport, updateReport } from '../services/report-service'
+import type { ReportInsert, ReportUpdatePayload } from '../services/report-service'
 import { useAuth } from '../../auth'
 import { toast } from 'sonner'
 
@@ -81,6 +81,21 @@ export const useReports = () => {
     [selectedReport],
   )
 
+  const handleUpdateReport = useCallback(
+    async (id: string, payload: ReportUpdatePayload) => {
+      const { data, error } = await updateReport(id, payload)
+      if (error || !data) {
+        toast.error(`Error al guardar: ${error ?? 'Sin respuesta'}`)
+        return false
+      }
+      toast.success('Reporte actualizado')
+      setReports(prev => prev.map(report => (report.id === id ? data : report)))
+      if (selectedReport?.id === id) setSelectedReport(data)
+      return true
+    },
+    [selectedReport],
+  )
+
   return {
     reports,
     loading,
@@ -88,6 +103,7 @@ export const useReports = () => {
     setSelectedReport,
     handleCloseMonth,
     handleDeleteReport,
+    handleUpdateReport,
     refreshReports: loadReports,
   }
 }

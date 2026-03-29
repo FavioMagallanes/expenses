@@ -18,6 +18,7 @@ export const Dashboard = () => {
     setSelectedReport,
     handleCloseMonth,
     handleDeleteReport,
+    handleUpdateReport,
   } = useReports()
   const { signOut } = useAuth()
   const openModal = useExpenseStore(s => s.openModal)
@@ -166,7 +167,11 @@ export const Dashboard = () => {
         />
       )}
       {selectedReport && (
-        <ReportDetailModal report={selectedReport} onClose={() => setSelectedReport(null)} />
+        <ReportDetailModal
+          report={selectedReport}
+          onClose={() => setSelectedReport(null)}
+          onUpdate={handleUpdateReport}
+        />
       )}
     </main>
   )

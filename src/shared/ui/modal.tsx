@@ -1,14 +1,17 @@
 import { Icon } from './icon'
 import { useModalCore } from '../hooks/use-modal-core'
+import { cn } from '../../core/utils/cn'
 
 interface ModalProps {
   title: string
   icon: string
   onClose: () => void
   children: React.ReactNode
+  /** Por encima del valor por defecto cuando hay modales anidados (ej. z-[100]). */
+  zIndexClass?: string
 }
 
-export const Modal = ({ title, icon, onClose, children }: ModalProps) => {
+export const Modal = ({ title, icon, onClose, children, zIndexClass = 'z-50' }: ModalProps) => {
   const { panelRef, handleTabKey } = useModalCore({ onClose })
 
   return (
@@ -16,7 +19,10 @@ export const Modal = ({ title, icon, onClose, children }: ModalProps) => {
       role="dialog"
       aria-modal="true"
       aria-label={title}
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+      className={cn(
+        'fixed inset-0 flex items-end sm:items-center justify-center',
+        zIndexClass,
+      )}
       onKeyDown={handleTabKey}
     >
       {/* Backdrop */}
