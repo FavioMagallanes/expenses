@@ -25,9 +25,9 @@ export const usePlannedExpenses = () => {
   }
 
   const handleClearPlan = () => {
-    const { nextMonthLabel } = getPlanMonthContext()
+    const { planTargetMonthName } = getPlanMonthContext()
     confirmToast({
-      title: `¿Vaciar el plan de ${nextMonthLabel}?`,
+      title: `¿Vaciar el plan a pagar en ${planTargetMonthName}?`,
       description:
         'Se borran los gastos del plan y el presupuesto de referencia. No modifica el mes en curso ni los reportes cerrados.',
       confirmLabel: 'Vaciar plan',

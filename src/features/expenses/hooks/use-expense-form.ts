@@ -53,8 +53,8 @@ export const useExpenseForm = (onSuccess?: () => void) => {
 
     if (expenseModalTarget === 'planned') {
       addPlannedExpense(payload)
-      const { nextMonthLabel } = getPlanMonthContext()
-      toast.success(`Guardado en el plan de ${nextMonthLabel}`)
+      const { planTargetMonthName } = getPlanMonthContext()
+      toast.success(`Guardado · a pagar en ${planTargetMonthName}`)
     } else {
       addExpense(payload)
       toast.success('Gasto registrado correctamente')

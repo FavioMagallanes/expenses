@@ -1,4 +1,5 @@
 import { CATEGORY_LABELS } from '../../../types'
+import { isLastInstallmentOfPlan } from '../../../core/expense/installment-display'
 import { Button } from '../../../shared/ui/button'
 import { formatCurrency } from '../../../core/math/format'
 import type { Expense } from '../../../types'
@@ -12,6 +13,8 @@ interface ExpenseItemProps {
 export const ExpenseItem = ({ expense, onEdit, onDelete }: ExpenseItemProps) => {
   const categoryId = expense.categoryId
   const label = CATEGORY_LABELS[categoryId] ?? 'Otros'
+  const showLastInstallmentBadge =
+    !!expense.installment && isLastInstallmentOfPlan(expense.installment)
 
   return (
     <div className="flex items-center justify-between p-3 border border-ds-border dark:border-dark-border rounded-none hover:bg-surface dark:hover:bg-dark-hover transition-colors group cursor-pointer">
@@ -25,14 +28,14 @@ export const ExpenseItem = ({ expense, onEdit, onDelete }: ExpenseItemProps) => 
             {expense.installment && (
               <>
                 <span className="mx-1.5 opacity-30">•</span>
-                {`Cuota ${expense.installment}`}
+                <span>{`Cuota ${expense.installment}`}</span>
+                {showLastInstallmentBadge && (
+                  <span className="ml-1.5 align-middle rounded-sm border border-primary/35 bg-primary/10 px-1.5 py-px text-[9px] font-bold uppercase tracking-wide text-primary">
+                    Última cuota
+                  </span>
+                )}
               </>
             )}
-            <span className="mx-1.5 opacity-30">•</span>
-            {new Date(expense.registeredAt).toLocaleDateString('es-AR', {
-              day: 'numeric',
-              month: 'short',
-            })}
           </p>
         </div>
       </div>

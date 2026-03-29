@@ -11,15 +11,17 @@ import { useApplyClosedReportBudgetToPlan } from '../hooks/use-apply-closed-repo
 import type { MonthlyReport } from '../../../types/database'
 
 type PlannedMonthSectionProps = {
-  currentMonthLabel: string
-  nextMonthLabel: string
+  ledgerMonthLabel: string
+  paymentMonthLabel: string
+  planTargetMonthName: string
   reports: MonthlyReport[]
   reportsLoading: boolean
 }
 
 export const PlannedMonthSection = ({
-  currentMonthLabel,
-  nextMonthLabel,
+  ledgerMonthLabel,
+  paymentMonthLabel,
+  planTargetMonthName,
   reports,
   reportsLoading,
 }: PlannedMonthSectionProps) => {
@@ -61,20 +63,23 @@ export const PlannedMonthSection = ({
       <div className="mb-4 border-b border-ds-border dark:border-dark-border pb-4 flex flex-col gap-4">
         <div className="w-full min-w-0">
           <h2 className="text-lg font-semibold tracking-tight text-ds-text dark:text-dark-text">
-            Plan para {nextMonthLabel}
+            A pagar en {planTargetMonthName}
           </h2>
           <p className="text-[12px] text-ds-secondary dark:text-dark-secondary mt-2 w-full max-w-2xl leading-relaxed text-pretty">
             <span className="text-ds-text dark:text-dark-text font-medium">
-              Mes en curso: {currentMonthLabel}.
-            </span>{' '}
-            Esta sección arma la referencia para{' '}
-            <strong className="text-ds-text dark:text-dark-text">{nextMonthLabel}</strong>. El
+              Ledger (registro): {ledgerMonthLabel}
+            </span>
+            . Ese resumen suele liquidarse en{' '}
+            <strong className="text-ds-text dark:text-dark-text">{paymentMonthLabel}</strong>. Acá
+            proyectás lo que estimás{' '}
+            <strong className="text-ds-text dark:text-dark-text">a pagar en {planTargetMonthName}</strong>
+            . El
             presupuesto de referencia se puede cargar desde el último mes cerrado y editarlo. Con{' '}
             <strong className="text-ds-text dark:text-dark-text">Traer cuotas</strong> sumás al plan
             la siguiente cuota de cada compra en tarjeta del último mes cerrado (ej. si en el reporte
             figura 1/3, entra 2/3). Los gastos nuevos los cargás con Agregar gasto. Nada de esto suma
-            al ledger de {currentMonthLabel}; si registrás una compra en cuotas en el ledger, la
-            siguiente cuota puede aparecer sola en este plan.
+            al ledger de {ledgerMonthLabel}; si registrás una compra en cuotas en el ledger, la siguiente
+            cuota puede aparecer sola en este plan.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2 w-full">
@@ -136,7 +141,7 @@ export const PlannedMonthSection = ({
           onSubmit={setPlannedBudget}
           isEditing={!!plannedBudget}
           initialValue={plannedBudget?.amount}
-          fieldLabel={`Presupuesto del plan (${nextMonthLabel})`}
+          fieldLabel={`Presupuesto a pagar en ${planTargetMonthName}`}
         />
       </div>
 
@@ -147,7 +152,7 @@ export const PlannedMonthSection = ({
             totalSpent={plannedTotalSpent}
             remainingBalance={plannedRemaining}
             isOverBudget={isPlannedOverBudget}
-            budgetFooterNote={`Referencia para ${nextMonthLabel}`}
+            budgetFooterNote={`A pagar en ${planTargetMonthName}`}
             remainingFooterNote={
               isPlannedOverBudget
                 ? 'Superaste el presupuesto planificado'
@@ -173,17 +178,22 @@ export const PlannedMonthSection = ({
           </Button>
         </div>
       ) : (
-        <ul className="flex flex-col gap-2">
-          {plannedExpenses.map(expense => (
-            <li key={expense.id}>
-              <ExpenseItem
-                expense={expense}
-                onEdit={handlePlannedEdit}
-                onDelete={handlePlannedDelete}
-              />
-            </li>
-          ))}
-        </ul>
+        <div className="flex flex-col gap-1">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-ds-secondary dark:text-dark-secondary px-1 pb-3 mb-1 border-b border-ds-border dark:border-dark-border">
+            Movimientos del plan · a pagar en {planTargetMonthName}
+          </p>
+          <ul className="flex flex-col gap-2">
+            {plannedExpenses.map(expense => (
+              <li key={expense.id}>
+                <ExpenseItem
+                  expense={expense}
+                  onEdit={handlePlannedEdit}
+                  onDelete={handlePlannedDelete}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </section>
   )

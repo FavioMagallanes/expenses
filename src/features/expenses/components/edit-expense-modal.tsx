@@ -26,8 +26,8 @@ const EditExpenseModalContent = ({ onClose }: { onClose: () => void }) => {
   }, [])
 
   const isPlanned = expenseModalTarget === 'planned'
-  const { nextMonthLabel } = getPlanMonthContext()
-  const title = isPlanned ? `Editar plan (${nextMonthLabel})` : 'Editar gasto'
+  const { planTargetMonthName } = getPlanMonthContext()
+  const title = isPlanned ? `Editar · a pagar en ${planTargetMonthName}` : 'Editar gasto'
   const submitLabel = isPlanned ? 'Guardar en el plan' : 'Guardar gasto'
 
   return (

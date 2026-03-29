@@ -25,21 +25,14 @@ export const CloseMonthModal = ({ onClose, onConfirm }: CloseMonthModalProps) =>
   const [keepBudget, setKeepBudget] = useState(true)
 
   const summary = getSummary()
-  const { nextMonthLabel } = getPlanMonthContext()
-
-  const monthLabel = new Date().toLocaleDateString('es-AR', {
-    month: 'long',
-    year: 'numeric',
-  })
-  // Capitalizar primera letra
-  const label = monthLabel.charAt(0).toUpperCase() + monthLabel.slice(1)
+  const { paymentMonthLabel, ledgerMonthLabel } = getPlanMonthContext()
 
   const handleConfirm = () => {
     if (submitting) return
     setSubmitting(true)
 
     const report: ReportInsert = {
-      label,
+      label: paymentMonthLabel,
       closed_at: new Date().toISOString(),
       budget: budget?.amount ?? 0,
       total_spent: summary.totalSpent,
@@ -62,9 +55,13 @@ export const CloseMonthModal = ({ onClose, onConfirm }: CloseMonthModalProps) =>
     <Modal title="Cerrar mes" icon="calendar-check" onClose={onClose}>
       <div className="space-y-4">
         <p className="text-[13px] text-ds-secondary dark:text-dark-secondary">
-          Vas a guardar el reporte de{' '}
-          <strong className="text-ds-text dark:text-dark-text">{label}</strong> y reiniciar los
-          datos del mes actual.
+          Cerrás el ledger de{' '}
+          <strong className="text-ds-text dark:text-dark-text">{ledgerMonthLabel}</strong> (lo que
+          registraste ahora suele pagarse en{' '}
+          <strong className="text-ds-text dark:text-dark-text">{paymentMonthLabel}</strong>). El
+          reporte queda guardado como{' '}
+          <strong className="text-ds-text dark:text-dark-text">{paymentMonthLabel}</strong> y se
+          reinician los gastos del mes en curso.
         </p>
 
         {/* Resumen */}
@@ -104,7 +101,7 @@ export const CloseMonthModal = ({ onClose, onConfirm }: CloseMonthModalProps) =>
             className="size-4 rounded border-ds-border dark:border-dark-border accent-primary cursor-pointer"
           />
           <span className="text-[13px] text-ds-text dark:text-dark-text">
-            Mantener presupuesto para {nextMonthLabel}
+            Mantener presupuesto para el próximo ledger ({paymentMonthLabel})
           </span>
         </label>
 

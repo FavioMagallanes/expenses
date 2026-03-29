@@ -2,8 +2,10 @@ import { Icon } from '../../../shared/ui/icon'
 import { ThemeToggle } from '../../../shared/ui/theme-toggle'
 
 type DashboardHeaderProps = {
-  currentMonthLabel: string
-  nextMonthLabel: string
+  /** Mes en que suele liquidarse el resumen del ledger actual (no viene de Supabase). */
+  paymentMonthLabel: string
+  ledgerMonthLabel: string
+  planTargetMonthName: string
   isPlannedPanelOpen: boolean
   onTogglePlannedPanel: () => void
   onToggleReportsPanel: () => void
@@ -11,8 +13,8 @@ type DashboardHeaderProps = {
 }
 
 export const DashboardHeader = ({
-  currentMonthLabel,
-  nextMonthLabel,
+  paymentMonthLabel,
+  planTargetMonthName,
   isPlannedPanelOpen,
   onTogglePlannedPanel,
   onToggleReportsPanel,
@@ -25,15 +27,17 @@ export const DashboardHeader = ({
           <h1 className="text-2xl md:text-3xl font-bold tracking-[0.15em] leading-none text-ds-text dark:text-dark-text uppercase">
             Gastly<span className="text-primary">.</span>
           </h1>
-          <div className="flex items-center gap-1.5 text-ds-secondary dark:text-dark-secondary text-[12px] tracking-wide uppercase mt-2 font-medium">
-            <Icon name="calendar" size="sm" />
-            {currentMonthLabel}
+          <div className="flex flex-col gap-0.5 mt-2">
+            <div className="flex items-center gap-1.5 text-ds-text dark:text-dark-text text-[12px] tracking-wide uppercase font-semibold">
+              <Icon name="calendar" size="sm" />
+              Resumen · {paymentMonthLabel}
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-1 mt-0.5 md:mt-2">
           <button
             type="button"
-            aria-label={`Plan para ${nextMonthLabel}`}
+            aria-label={`Plan a pagar en ${planTargetMonthName}`}
             onClick={onTogglePlannedPanel}
             className={`size-8 inline-flex items-center justify-center rounded-lg transition-colors cursor-pointer ${
               isPlannedPanelOpen

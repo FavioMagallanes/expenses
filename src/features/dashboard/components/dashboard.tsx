@@ -33,7 +33,10 @@ export const Dashboard = () => {
   const [showReports, setShowReports] = useState(false)
   const [showPlanned, setShowPlanned] = useState(false)
 
-  const { currentMonthLabel, nextMonthLabel } = useMemo(() => getPlanMonthContext(), [])
+  const { ledgerMonthLabel, paymentMonthLabel, planTargetMonthName } = useMemo(
+    () => getPlanMonthContext(),
+    [],
+  )
 
   return (
     <main className="min-h-screen bg-background dark:bg-dark-bg flex justify-center py-12 transition-colors relative">
@@ -42,8 +45,9 @@ export const Dashboard = () => {
       <div className="w-full max-w-4xl px-6 md:px-16 relative z-10">
         <div className="mb-10">
           <DashboardHeader
-            currentMonthLabel={currentMonthLabel}
-            nextMonthLabel={nextMonthLabel}
+            paymentMonthLabel={paymentMonthLabel}
+            ledgerMonthLabel={ledgerMonthLabel}
+            planTargetMonthName={planTargetMonthName}
             isPlannedPanelOpen={showPlanned}
             onTogglePlannedPanel={() => setShowPlanned(prev => !prev)}
             onToggleReportsPanel={() => setShowReports(prev => !prev)}
@@ -90,6 +94,7 @@ export const Dashboard = () => {
 
           <ExpenseList
             expenses={expenses}
+            listCaption={`Ledger · cargás en ${ledgerMonthLabel} · liquidación ${paymentMonthLabel}`}
             onEdit={handleEdit}
             onDelete={handleDelete}
             onAddFirst={openModal}
@@ -99,8 +104,9 @@ export const Dashboard = () => {
 
         {showPlanned && (
           <PlannedMonthSection
-            currentMonthLabel={currentMonthLabel}
-            nextMonthLabel={nextMonthLabel}
+            ledgerMonthLabel={ledgerMonthLabel}
+            paymentMonthLabel={paymentMonthLabel}
+            planTargetMonthName={planTargetMonthName}
             reports={reports}
             reportsLoading={reportsLoading}
           />

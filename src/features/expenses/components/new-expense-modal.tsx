@@ -13,14 +13,14 @@ export const NewExpenseModal = () => {
   const formValue = useExpenseForm(closeModal)
 
   const isPlanned = expenseModalTarget === 'planned'
-  const { nextMonthLabel } = getPlanMonthContext()
+  const { planTargetMonthName } = getPlanMonthContext()
 
   useEffect(() => {
     formValue.amountRef.current?.focus()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const title = isPlanned ? `Nuevo gasto · plan ${nextMonthLabel}` : 'Registro rápido'
+  const title = isPlanned ? `Nuevo gasto · a pagar en ${planTargetMonthName}` : 'Registro rápido'
   const submitLabel = (() => {
     if (!isPlanned) return 'Guardar gasto'
     return plannedCount === 0 ? 'Agregar gasto' : 'Agregar gasto al plan'

@@ -6,16 +6,32 @@ const capitalizeFirst = (value: string): string => {
 const monthYearEsAr = (date: Date): string =>
   capitalizeFirst(date.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' }))
 
+/** Nombre del mes en es-AR, sin año (p. ej. "mayo"). */
+const monthNameOnlyEsAr = (date: Date): string =>
+  date.toLocaleDateString('es-AR', { month: 'long' })
+
+const startOfCalendarMonth = (date: Date): Date =>
+  new Date(date.getFullYear(), date.getMonth(), 1)
+
+const addCalendarMonths = (monthStart: Date, monthsToAdd: number): Date =>
+  new Date(monthStart.getFullYear(), monthStart.getMonth() + monthsToAdd, 1)
+
 /**
- * Mes calendario en curso y el mes siguiente (para rotular el plan).
+ * Etiquetas alineadas al flujo tarjeta/resumen: cargás gastos en un mes calendario (ledger),
+ * esos consumos suelen liquidarse en el mes siguiente (pago), y el plan adelantado apunta al
+ * mes posterior (lo que viene después del ciclo de pago inmediato).
  */
 export const getPlanMonthContext = (referenceDate: Date = new Date()) => {
-  const year = referenceDate.getFullYear()
-  const monthIndex = referenceDate.getMonth()
-  const nextMonthStart = new Date(year, monthIndex + 1, 1)
+  const ledgerMonthStart = startOfCalendarMonth(referenceDate)
+  const paymentMonthStart = addCalendarMonths(ledgerMonthStart, 1)
+  const planTargetMonthStart = addCalendarMonths(ledgerMonthStart, 2)
 
   return {
-    currentMonthLabel: monthYearEsAr(referenceDate),
-    nextMonthLabel: monthYearEsAr(nextMonthStart),
+    /** Mes del ledger donde registrás gastos hoy. */
+    ledgerMonthLabel: monthYearEsAr(ledgerMonthStart),
+    /** Mes en que ese resumen suele pagarse / nombre del reporte al cerrar el mes. */
+    paymentMonthLabel: monthYearEsAr(paymentMonthStart),
+    /** Mes objetivo del plan (pago esperado), solo nombre sin año. */
+    planTargetMonthName: monthNameOnlyEsAr(planTargetMonthStart),
   }
 }
