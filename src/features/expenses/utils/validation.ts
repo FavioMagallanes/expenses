@@ -9,6 +9,19 @@ export interface ExpenseFormFields {
 
 export type ExpenseErrors = Partial<Record<keyof ExpenseFormFields, string>>
 
+/**
+ * Tarjeta: si ambos campos de cuotas van vacíos, se persiste como pago único `1/1`.
+ */
+export const resolveInstallmentForSubmit = (
+  currentInstallment: string,
+  totalInstallments: string,
+): string => {
+  const c = currentInstallment.trim()
+  const t = totalInstallments.trim()
+  if (c === '' && t === '') return '1/1'
+  return `${c}/${t}`
+}
+
 export const validateExpense = (
   fields: ExpenseFormFields,
   requiresBank: boolean,
@@ -26,19 +39,29 @@ export const validateExpense = (
   }
 
   if (showInstallments) {
-    const current = parseInt(fields.currentInstallment)
-    const total = parseInt(fields.totalInstallments)
+    const cRaw = fields.currentInstallment.trim()
+    const tRaw = fields.totalInstallments.trim()
+    const bothEmpty = cRaw === '' && tRaw === ''
 
-    if (!fields.currentInstallment || isNaN(current) || current < 1) {
-      errors.currentInstallment = 'Cuota actual inválida'
-    }
+    if (!bothEmpty) {
+      const current = parseInt(fields.currentInstallment, 10)
+      const total = parseInt(fields.totalInstallments, 10)
 
-    if (!fields.totalInstallments || isNaN(total) || total < 1) {
-      errors.totalInstallments = 'Total de cuotas inválido'
-    }
+      if (!cRaw || isNaN(current) || current < 1) {
+        errors.currentInstallment = 'Cuota actual inválida'
+      }
 
-    if (current > total && !errors.currentInstallment && !errors.totalInstallments) {
-      errors.currentInstallment = 'No puede superar el total'
+      if (!tRaw || isNaN(total) || total < 1) {
+        errors.totalInstallments = 'Total de cuotas inválido'
+      }
+
+      if (
+        !errors.currentInstallment &&
+        !errors.totalInstallments &&
+        current > total
+      ) {
+        errors.currentInstallment = 'No puede superar el total'
+      }
     }
   }
 

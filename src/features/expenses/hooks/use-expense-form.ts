@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useExpenseStore } from '../../../store/expense-store'
 import { CATEGORIES } from '../../../types'
-import { validateExpense } from '../utils/validation'
+import { validateExpense, resolveInstallmentForSubmit } from '../utils/validation'
 import type { ExpenseFormFields, ExpenseErrors } from '../utils/validation'
 
 const INITIAL_STATE: ExpenseFormFields = {
@@ -60,7 +60,7 @@ export const useExpenseForm = (onSuccess?: () => void) => {
       categoryId: fields.categoryId,
       totalAmount: parseFloat(fields.totalAmount),
       installment: showInstallments
-        ? `${fields.currentInstallment}/${fields.totalInstallments}`
+        ? resolveInstallmentForSubmit(fields.currentInstallment, fields.totalInstallments)
         : undefined,
       banco: requiresBank ? fields.banco : undefined,
     })
